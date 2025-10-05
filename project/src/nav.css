@@ -1,0 +1,113 @@
+/* ================================
+   NAVIGATION (Header Tabs)
+================================== */
+.nav-tabs-custom {
+  border-bottom: 2px solid #e5e7eb; /* xám nhạt */
+}
+
+.nav-tabs-custom .nav-link-custom {
+  color: #374151; /* text-gray-700 */
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.25s ease;
+}
+
+.nav-tabs-custom .nav-link-custom:hover {
+  background-color: #f1f1f1;
+  color: #0d4f1f;
+}
+
+.nav-tabs-custom .nav-link-active {
+  background-color: #1a237e;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+/* ================================
+   PAGE COMMON STYLE
+================================== */
+.page-container {
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1e3a8a; /* text-blue-900 */
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-title svg {
+  margin-right: 8px;
+}
+
+/* ================================
+   CARDS (News, BorrowReturn, etc.)
+================================== */
+.card-custom {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.card-custom:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Title */
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+/* Card Text */
+.card-text {
+  color: #4b5563; /* text-gray-600 */
+  line-height: 1.6;
+}
+
+/* ================================
+   BORROW RETURN STATUS LABELS
+================================== */
+.status-returned {
+  color: #059669; /* xanh lá */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.status-overdue {
+  color: #dc2626; /* đỏ */
+  font-weight: 600;
+}
+
+.status-borrowing {
+  color: #d97706; /* cam */
+  font-weight: 500;
+}
+
+/* ================================
+   ACCOUNT PAGE BUTTON
+================================== */
+.btn-update {
+  background-color: #1e40af;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+.btn-update:hover {
+  background-color: #1e3a8a;
+}

@@ -1,0 +1,350 @@
+:root {
+  --primary-blue: #1e3a8a;
+  --secondary-blue: #3b82f6;
+  --accent-orange: #f97316;
+  --success-green: #10b981;
+  --warning-yellow: #f59e0b;
+  --danger-red: #ef4444;
+  --light-gray: #f8fafc;
+  --medium-gray: #64748b;
+  --dark-gray: #1e293b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  line-height: 1.6;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+  background: linear-gradient(180deg, #fff4c1, #8b94a2);
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+}
+
+.card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-blue);
+  border-color: var(--secondary-blue);
+  transform: translateY(-1px);
+}
+
+.btn-success {
+  background-color: var(--success-green);
+  border-color: var(--success-green);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.btn-warning {
+  background-color: var(--warning-yellow);
+  border-color: var(--warning-yellow);
+  border-radius: 8px;
+  font-weight: 500;
+  color: white;
+}
+
+.btn-danger {
+  background-color: var(--danger-red);
+  border-color: var(--danger-red);
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+  background-color: var(--primary-blue);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 1rem;
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.badge.bg-success {
+  background-color: var(--success-green) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--warning-yellow) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--danger-red) !important;
+}
+
+.stat-card {
+  background: linear-gradient(
+    135deg,
+    var(--primary-blue),
+    var(--secondary-blue)
+  );
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.search-bar {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .stat-card h3 {
+    font-size: 2rem;
+  }
+}
+/*CSS cho trang client*/
+/* Header styles */
+.header-banner {
+  background: linear-gradient(135deg, #4dae6c, #0c1566);
+  border-bottom: 4px solid #90da6d;
+}
+
+.site-title {
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+.nav-wrapper {
+  margin-top: 15px;
+}
+
+.nav-tabs-custom .nav-link-custom {
+  color: #555;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+.nav-tabs-custom .nav-link-custom:hover {
+  background-color: #6887d6;
+  color: #0d4f1f;
+}
+
+.nav-tabs-custom .nav-link-custom.active {
+  background-color: #1a237e;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.search-box {
+  transition: all 0.3s ease;
+}
+
+.search-box:hover {
+  transform: translateY(-3px);
+}
+
+.search-input {
+  border-radius: 12px 0 0 12px;
+}
+
+.search-input:focus {
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  border-color: #1a237e;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, #283593, #1a237e);
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  background: linear-gradient(135deg, #39ab4c, #283593);
+  transform: scale(1.05);
+}
+/* Sidebar Danh mục */
+
+.category-sidebar {
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.category-sidebar:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.category-list .list-group-item {
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.category-list .list-group-item:hover {
+  background-color: #f5f5f5;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+.book-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  border-radius: 10px;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+.recommend-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.recommend-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+.btn-logout {
+  background-color: #e53e3e;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #c53030;
+}
+.btn-login {
+  background-color: #1e3d9b;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-login:hover {
+  background-color: #0c1566;
+}
+/* Footer styles */
+.footer-section {
+  background: linear-gradient(135deg, #0c1566, #4dae6c);
+  border-top: 4px solid #90da6d;
+  padding: 40px 0;
+}
+
+.footer-section h5,
+.footer-section h6 {
+  color: #ffffff;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  padding-left: 4px;
+}
+
+.footer-section p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-section .opacity-75 {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
