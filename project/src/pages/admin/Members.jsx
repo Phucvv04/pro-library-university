@@ -22,7 +22,7 @@ const Members = () => {
   const [showForm, setShowForm] = useState(false); // Thêm mới
   const [editingMember, setEditingMember] = useState(null); // Sửa
 
-  const memberRoles = ["all", "Sinh viên", "Giảng viên", "Thủ thư"];
+  const memberRoles = ["all", "Độc giả", "Thủ thư", "Quản lý"];
 
   // Gọi API lấy danh sách
   useEffect(() => {

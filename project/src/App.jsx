@@ -7,7 +7,6 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./nav.css";
-/* Toastify */
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,6 +36,9 @@ import Guide from "./pages/client/pages/Guide.jsx";
 import News from "./pages/client/pages/News.jsx";
 import Account from "./pages/client/pages/Account.jsx";
 
+/* ProtectedRoute */
+import ProtectedRoute from "./pages/auth/ProtectedRoute.jsx";
+
 function App() {
   return (
     <>
@@ -47,7 +49,7 @@ function App() {
 
           {/* Client Routes */}
           <Route path="/client" element={<ClientLayout />}>
-            <Route index element={<Home />} /> {/* /client */}
+            <Route index element={<Home />} />
             <Route path="borrow-return" element={<BorrowReturn />} />
             <Route path="guide" element={<Guide />} />
             <Route path="news" element={<News />} />
@@ -56,9 +58,19 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} /> {/* /admin */}
+            <Route index element={<Dashboard />} />
             <Route path="books" element={<Books />} />
-            <Route path="members" element={<Members />} />
+
+            {/* Chỉ Admin được quyền vào Members */}
+            <Route
+              path="members"
+              element={
+                <ProtectedRoute allowedRoles={["Quản lý"]}>
+                  <Members />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="authors" element={<Authors />} />
             <Route path="publishers" element={<Publishers />} />
             <Route path="categories" element={<Categories />} />
@@ -67,7 +79,7 @@ function App() {
             <Route path="statistics" element={<Statistics />} />
           </Route>
 
-          {/* Auth Routes (bên ngoài AdminLayout nếu muốn login/register riêng) */}
+          {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

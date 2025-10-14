@@ -71,9 +71,9 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 value={formData.vaiTro || ""}
                 onChange={handleChange}
               >
-                <option value="Sinh viên">Sinh viên</option>
-                <option value="Giảng viên">Giảng viên</option>
+                <option value="Độc giả">Độc giả</option>
                 <option value="Thủ thư">Thủ thư</option>
+                <option value="Quản lý">Quản lý</option>
               </select>
             </div>
             <div className="col-md-4">

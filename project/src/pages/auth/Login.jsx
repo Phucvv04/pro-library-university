@@ -3,12 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { getMembers } from "../../services/memberService";
 
 const Login = () => {
-  const [vaiTro, setVaiTro] = useState("Sinh Viên");
+  const [vaiTro, setVaiTro] = useState("Độc giả");
   const roles = [
-    { label: "SinhVien", value: "Sinh Viên" },
-    { label: "GiangVien", value: "Giảng Viên" },
-    { label: "ThuThu", value: "Thủ Thư" },
+    { label: "docgia", value: "Độc giả" },
+    { label: "thuthu", value: "Thủ thư" },
+    { label: "quanly", value: "Quản lý" },
   ];
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -16,33 +17,53 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // 1️⃣ Kiểm tra trống
+    if (!username || !password) {
+      alert("Vui lòng nhập thông tin");
+      return;
+    }
+
+    // 2️⃣ Kiểm tra ký tự đặc biệt
+    const regex = /^[a-zA-Z0-9]+$/;
+    if (!regex.test(username)) {
+      alert("Tài khoản không hợp lệ");
+      return;
+    }
+
     try {
       const res = await getMembers();
       const members = res.data;
 
-      const user = members.find(
-        (m) =>
-          m.username === username &&
-          m.password === password &&
-          m.vaiTro === vaiTro
-      );
+      // 3️⃣ Kiểm tra tài khoản tồn tại
+      const userExist = members.find((m) => m.username === username);
+      if (!userExist) {
+        alert("Tài khoản không tồn tại");
+        return;
+      }
 
-      if (user) {
-        // ✅ Lưu user vào localStorage
-        localStorage.setItem("user", JSON.stringify(user));
+      // 4️⃣ Kiểm tra mật khẩu
+      if (userExist.password !== password) {
+        alert("Sai tài khoản hoặc mật khẩu");
+        return;
+      }
 
-        // Điều hướng theo vai trò
-        if (vaiTro === "Thủ Thư") {
-          navigate("/admin");
-        } else {
-          navigate("/client");
-        }
+      // 5️⃣ Kiểm tra vai trò
+      if (userExist.vaiTro !== vaiTro) {
+        alert("Đăng nhập không thành công");
+        return;
+      }
+
+      // ✅ Thành công
+      localStorage.setItem("user", JSON.stringify(userExist));
+
+      if (vaiTro === "Thủ thư" || vaiTro === "Quản lý") {
+        navigate("/admin");
       } else {
-        alert("Sai tài khoản hoặc mật khẩu!");
+        navigate("/client");
       }
     } catch (err) {
       console.error("Login error:", err);
-      alert("Có lỗi xảy ra khi đăng nhập!");
+      alert("Đăng nhập không thành công!");
     }
   };
 
@@ -85,7 +106,6 @@ const Login = () => {
             </select>
           </div>
 
-          {/* Username */}
           <div className="mb-3">
             <label className="form-label fw-semibold">Tài khoản</label>
             <input
@@ -97,7 +117,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password */}
           <div className="mb-3">
             <label className="form-label fw-semibold">Mật khẩu</label>
             <input

@@ -6,7 +6,7 @@ const AddMemberForm = ({ onSave, onCancel }) => {
     email: "",
     username: "",
     password: "",
-    vaiTro: "Sinh viên",
+    vaiTro: "Độc giả",
     gioiTinh: "",
     sdt: "",
     diaChi: "",
@@ -80,9 +80,9 @@ const AddMemberForm = ({ onSave, onCancel }) => {
                 value={formData.vaiTro}
                 onChange={handleChange}
               >
-                <option value="Sinh viên">Sinh viên</option>
-                <option value="Giảng viên">Giảng viên</option>
+                <option value="Độc giả">Độc giả</option>
                 <option value="Thủ thư">Thủ thư</option>
+                <option value="Quản lý">Quản lý</option>
               </select>
             </div>
             <div className="col-md-4">
@@ -93,7 +93,6 @@ const AddMemberForm = ({ onSave, onCancel }) => {
                 value={formData.gioiTinh}
                 onChange={handleChange}
               >
-                <option value="">--Chọn--</option>
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
               </select>

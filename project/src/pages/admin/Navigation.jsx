@@ -16,8 +16,13 @@ import {
 const Navigation = () => {
   const location = useLocation();
 
+  // Lấy thông tin vai trò (ví dụ: từ localStorage hoặc Context)
+  const user = JSON.parse(localStorage.getItem("user"));
+  const vaiTro = user?.vaiTro || ""; // ví dụ "Admin" hoặc "Thủ thư"
+
   const isActive = (path) => location.pathname === path;
 
+  // Danh sách menu mặc định
   const navItems = [
     { path: "/admin", icon: <FaChartBar />, label: "Dashboard" },
     { path: "/admin/books", icon: <FaBook />, label: "Quản lý sách" },
@@ -42,6 +47,12 @@ const Navigation = () => {
     { path: "/admin/statistics", icon: <FaChartLine />, label: "Thống kê" },
   ];
 
+  // Nếu là Thủ thư thì loại bỏ menu Quản lý người dùng
+  const filteredNavItems =
+    vaiTro === "Thủ thư"
+      ? navItems.filter((item) => item.path !== "/admin/members")
+      : navItems;
+
   return (
     <nav
       className="navbar navbar-dark fixed-top custom-navbar d-none d-lg-flex flex-column"
@@ -65,7 +76,7 @@ const Navigation = () => {
 
         {/* Menu */}
         <ul className="nav nav-pills flex-column mb-auto">
-          {navItems.map((item) => (
+          {filteredNavItems.map((item) => (
             <li className="nav-item mb-2" key={item.path}>
               <Link
                 className={`nav-link d-flex align-items-center ${
@@ -94,7 +105,7 @@ const Navigation = () => {
           ))}
         </ul>
 
-        {/* Profile + Đăng xuất */}
+        {/* Đăng xuất */}
         <div
           className="mt-auto mb-3 p-3"
           style={{

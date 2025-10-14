@@ -8,7 +8,7 @@ const Register = () => {
     email: "",
     username: "",
     password: "",
-    vaiTro: "Sinh Viên",
+    vaiTro: "Độc giả",
     gioiTinh: "Nam",
     sdt: "",
     diaChi: "",
@@ -32,7 +32,7 @@ const Register = () => {
     if (!formData.email.trim()) {
       newErrors.email = "Vui lòng nhập email";
     } else {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/; // chỉ chấp nhận email kết thúc bằng @gmail.com
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
       if (!emailRegex.test(formData.email)) {
         newErrors.email = "Email phải có định dạng @gmail.com";
       }
@@ -152,16 +152,12 @@ const Register = () => {
           </div>
           <div className="col-md-6">
             <label className="form-label">Vai trò</label>
-            <select
+            <input
               name="vaiTro"
-              className="form-select"
+              className="form-control"
               value={formData.vaiTro}
-              onChange={handleChange}
-            >
-              <option>Sinh Viên</option>
-              <option>Giảng Viên</option>
-              <option>Thủ Thư</option>
-            </select>
+              readOnly
+            ></input>
           </div>
           <div className="col-md-6">
             <label className="form-label">Giới tính</label>
