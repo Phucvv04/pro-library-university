@@ -11,6 +11,7 @@ import {
 import { getAuthors } from "../../services/authorService";
 import { getCategories } from "../../services/categoryService";
 import { getPublishers } from "../../services/publisherService";
+import { getBorrowDetails } from "../../services/borrowingDetailService";
 
 // Import icon từ react-icons
 import { FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
@@ -64,13 +65,7 @@ const Books = () => {
 
   const filteredBooks = books.filter((book) => {
     const search = searchTerm.toLowerCase();
-    return (
-      book.tenSach?.toLowerCase().includes(search) ||
-      book.maSach?.toLowerCase().includes(search) ||
-      getAuthorName(book.maTacGia)?.toLowerCase().includes(search) ||
-      getCategoryName(book.maTheLoai)?.toLowerCase().includes(search) ||
-      getPublisherName(book.maNhaXB)?.toLowerCase().includes(search)
-    );
+    return book.tenSach?.toLowerCase().includes(search);
   });
 
   const handleAddBook = async (data) => {
@@ -111,13 +106,24 @@ const Books = () => {
       toast.info("Đã hủy xóa sách.");
       return;
     }
+
     try {
+      const borrowDetailsRes = await getBorrowDetails();
+      const borrowDetails = borrowDetailsRes.data || [];
+
+      const isBorrowed = borrowDetails.some((detail) => detail.maSach === id);
+
+      if (isBorrowed) {
+        toast.error("Không thể xóa sách vì đang được mượn!");
+        return;
+      }
+
       await deleteBook(id);
       toast.success("Xóa sách thành công!");
       fetchAll();
     } catch (err) {
-      toast.error("Lỗi khi xóa sách!");
       console.error(err);
+      toast.error("Lỗi khi xóa sách!");
     }
   };
 
@@ -178,7 +184,7 @@ const Books = () => {
             <input
               type="text"
               className="form-control ps-5"
-              placeholder="Tìm kiếm theo ID, tên sách, tác giả..."
+              placeholder="Tìm kiếm theo tên sách"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

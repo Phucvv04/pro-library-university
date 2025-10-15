@@ -8,8 +8,8 @@ import {
   updateCategory,
   deleteCategory,
 } from "../../services/categoryService";
+import { getBooks } from "../../services/bookService";
 
-// Import icons
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 const Categories = () => {
@@ -84,6 +84,20 @@ const Categories = () => {
       return;
     }
     try {
+      const booksRes = await getBooks();
+      const books = booksRes.data || [];
+
+      const hasLinkedBooks = books.some(
+        (book) =>
+          book.tenTheLoai ===
+          categories.find((a) => a.maTheLoai === id)?.tenTheLoai
+      );
+
+      if (hasLinkedBooks) {
+        toast.error("Không thể xóa thể loại vì đang được liên kết với sách!");
+        return;
+      }
+
       await deleteCategory(id);
       toast.success("Xóa thể loại thành công!");
       fetchCategories();
@@ -128,6 +142,7 @@ const Categories = () => {
       {editingCategory && (
         <UpdateCategoryForm
           category={editingCategory}
+          categories={categories}
           onSave={handleUpdateCategory}
           onClose={() => setEditingCategory(null)}
         />

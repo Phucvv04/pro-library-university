@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 const AddCategoryForm = ({ onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     tenTheLoai: "",
@@ -20,12 +20,16 @@ const AddCategoryForm = ({ onSave, onCancel }) => {
     e.preventDefault();
 
     if (!formData.tenTheLoai.trim()) {
-      alert("Tên thể loại không được để trống!");
+      toast.error("Tên thể loại không được để trống!");
+      return;
+    }
+    if (!formData.moTa.trim()) {
+      toast.error("Vui lòng nhập mô tả!");
       return;
     }
 
     if (onSave) {
-      onSave(formData); // Gửi đúng format cho API
+      onSave(formData);
     }
 
     // Reset form
@@ -60,16 +64,16 @@ const AddCategoryForm = ({ onSave, onCancel }) => {
             placeholder="Nhập mô tả..."
           ></textarea>
         </div>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex gap-2">
+          <button type="submit" className="btn btn-success">
+            Lưu
+          </button>
           <button
             type="button"
-            className="btn btn-secondary me-2"
+            className="btn btn-secondary"
             onClick={onCancel}
           >
             Hủy
-          </button>
-          <button type="submit" className="btn btn-primary">
-            Lưu
           </button>
         </div>
       </form>

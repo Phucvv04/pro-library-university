@@ -63,7 +63,6 @@ export default function AddBorrowDetailForm({
           <div className="col-md-6">
             <label className="form-label">Số lượng</label>
             <input
-              type="number"
               name="soLuong"
               className="form-control"
               value={formData.soLuong}

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-const UpdateMemberForm = ({ member, onSave, onClose }) => {
+const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
   const [formData, setFormData] = useState({ ...member });
 
   const handleChange = (e) => {
@@ -10,7 +11,60 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const { tenNguoiDung, email, username, password, sdt, diaChi } = formData;
+
+    if (!tenNguoiDung.trim()) {
+      toast.error("Vui lòng nhập tên người dùng!");
+      return;
+    }
+
+    const isUsernameExist = existingUsers.some(
+      (u) =>
+        u.username.trim().toLowerCase() === username.trim().toLowerCase() &&
+        u.id !== member.id
+    );
+    if (isUsernameExist) {
+      toast.error("Tên đăng nhập đã tồn tại!");
+      return;
+    }
+
+    const isEmailExist = existingUsers.some(
+      (u) =>
+        u.email.trim().toLowerCase() === email.trim().toLowerCase() &&
+        u.id !== member.id
+    );
+    if (isEmailExist) {
+      toast.error("Email đã được sử dụng!");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Email không hợp lệ!");
+      return;
+    }
+    if (password.trim().length < 6) {
+      toast.error("Mật khẩu không hợp lệ!");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]+$/;
+    if (
+      sdt &&
+      (!phoneRegex.test(sdt) || !sdt.startsWith("0") || sdt.length < 10)
+    ) {
+      toast.error("Số điện thoại không hợp lệ!");
+      return;
+    }
+
+    if (!diaChi.trim()) {
+      toast.error("Vui lòng nhập địa chỉ!");
+      return;
+    }
+
     onSave(formData);
+    toast.success("Cập nhật người dùng thành công!");
   };
 
   return (
@@ -30,6 +84,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 required
               />
             </div>
+
             <div className="col-md-6">
               <label className="form-label">Email</label>
               <input
@@ -41,6 +96,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 required
               />
             </div>
+
             <div className="col-md-6">
               <label className="form-label">Username</label>
               <input
@@ -52,6 +108,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 required
               />
             </div>
+
             <div className="col-md-6">
               <label className="form-label">Password</label>
               <input
@@ -63,6 +120,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 required
               />
             </div>
+
             <div className="col-md-4">
               <label className="form-label">Vai trò</label>
               <select
@@ -76,6 +134,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 <option value="Quản lý">Quản lý</option>
               </select>
             </div>
+
             <div className="col-md-4">
               <label className="form-label">Giới tính</label>
               <select
@@ -89,6 +148,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 <option value="Nữ">Nữ</option>
               </select>
             </div>
+
             <div className="col-md-4">
               <label className="form-label">Số điện thoại</label>
               <input
@@ -99,6 +159,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
                 onChange={handleChange}
               />
             </div>
+
             <div className="col-12">
               <label className="form-label">Địa chỉ</label>
               <input
@@ -110,6 +171,7 @@ const UpdateMemberForm = ({ member, onSave, onClose }) => {
               />
             </div>
           </div>
+
           <div className="mt-3 d-flex justify-content-end">
             <button
               type="button"

@@ -8,6 +8,7 @@ import {
   updatePublisher,
   deletePublisher,
 } from "../../services/publisherService";
+import { getBooks } from "../../services/bookService";
 import { FaSearch, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const Publishers = () => {
@@ -15,11 +16,9 @@ const Publishers = () => {
   const [publishers, setPublishers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // State quản lý form
-  const [showForm, setShowForm] = useState(false); // thêm
-  const [editingPublisher, setEditingPublisher] = useState(null); // sửa
+  const [showForm, setShowForm] = useState(false);
+  const [editingPublisher, setEditingPublisher] = useState(null);
 
-  // Lấy danh sách NXB khi load trang
   useEffect(() => {
     fetchPublishers();
   }, []);
@@ -39,7 +38,6 @@ const Publishers = () => {
     }
   };
 
-  // Lọc theo từ khóa
   const filteredPublishers = publishers.filter((publisher) =>
     publisher.tenNhaXB?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -88,6 +86,19 @@ const Publishers = () => {
       return;
     }
     try {
+      const booksRes = await getBooks();
+      const books = booksRes.data || [];
+
+      const hasLinkedBooks = books.some(
+        (book) =>
+          book.tenNhaXB === publishers.find((a) => a.maNhaXB === id)?.tenNhaXB
+      );
+
+      if (hasLinkedBooks) {
+        toast.error("Không thể xóa NXB vì đang được liên kết với sách!");
+        return;
+      }
+
       await deletePublisher(id);
       toast.success("Xóa nhà xuất bản thành công!");
       fetchPublishers();
@@ -133,6 +144,7 @@ const Publishers = () => {
       {editingPublisher && (
         <UpdatePublisherForm
           publisher={editingPublisher}
+          publishers={publishers}
           onSave={handleUpdatePublisher}
           onClose={() => setEditingPublisher(null)}
         />

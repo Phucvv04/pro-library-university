@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -14,44 +14,75 @@ const Register = () => {
     diaChi: "",
   });
 
-  const [errors, setErrors] = useState({}); // lưu lỗi validate
+  const [errors, setErrors] = useState({});
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+
+  // Lấy danh sách người dùng để kiểm tra trùng
+  useEffect(() => {
+    axios
+      .get("http://localhost:8085/api/nguoi-dung")
+      .then((res) => setUsers(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" })); // xóa lỗi khi nhập lại
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     let newErrors = {};
 
+    // Họ tên
     if (!formData.tenNguoiDung.trim())
       newErrors.tenNguoiDung = "Vui lòng nhập họ và tên";
 
+    // Email
     if (!formData.email.trim()) {
       newErrors.email = "Vui lòng nhập email";
     } else {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
       if (!emailRegex.test(formData.email)) {
         newErrors.email = "Email phải có định dạng @gmail.com";
+      } else if (users.some((u) => u.email === formData.email)) {
+        newErrors.email = "Email đã tồn tại";
       }
     }
 
-    if (!formData.username.trim())
+    // Username
+    if (!formData.username.trim()) {
       newErrors.username = "Vui lòng nhập username";
-    if (!formData.password.trim())
-      newErrors.password = "Vui lòng nhập password";
+    } else if (/\s/.test(formData.username)) {
+      newErrors.username = "Username không được chứa khoảng trắng";
+    } else if (/[^a-zA-Z0-9]/.test(formData.username)) {
+      newErrors.username = "Username không được chứa ký tự đặc biệt";
+    } else if (users.some((u) => u.username === formData.username)) {
+      newErrors.username = "Tên đăng nhập đã tồn tại";
+    }
 
+    // Password
+    if (!formData.password.trim()) {
+      newErrors.password = "Vui lòng nhập mật khẩu";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Mật khẩu tối thiểu 6 ký tự";
+    } else if (/\s/.test(formData.password)) {
+      newErrors.password = "Mật khẩu không được chứa khoảng trắng";
+    }
+
+    // Số điện thoại
     if (!formData.sdt.trim()) {
       newErrors.sdt = "Vui lòng nhập số điện thoại";
-    } else {
-      const phoneRegex = /^[0-9]{10}$/;
-      if (!phoneRegex.test(formData.sdt)) {
-        newErrors.sdt = "Số điện thoại phải gồm đúng 10 chữ số";
-      }
+    } else if (!/^[0-9]+$/.test(formData.sdt)) {
+      newErrors.sdt = "Số điện thoại không hợp lệ (chỉ được chứa số)";
+    } else if (!formData.sdt.startsWith("0")) {
+      newErrors.sdt = "Số điện thoại phải bắt đầu bằng số 0";
+    } else if (formData.sdt.length !== 10) {
+      newErrors.sdt = "Số điện thoại phải gồm đúng 10 chữ số";
     }
 
+    // Địa chỉ
     if (!formData.diaChi.trim()) newErrors.diaChi = "Vui lòng nhập địa chỉ";
 
     setErrors(newErrors);
@@ -61,11 +92,10 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // nếu lỗi thì không submit
+    if (!validate()) return;
 
     try {
       await axios.post("http://localhost:8085/api/nguoi-dung", formData);
-
       alert("Đăng ký thành công!");
       navigate("/login");
     } catch (error) {
@@ -111,6 +141,7 @@ const Register = () => {
               <small className="text-danger">{errors.tenNguoiDung}</small>
             )}
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Email</label>
             <input
@@ -124,6 +155,7 @@ const Register = () => {
               <small className="text-danger">{errors.email}</small>
             )}
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Username</label>
             <input
@@ -137,6 +169,7 @@ const Register = () => {
               <small className="text-danger">{errors.username}</small>
             )}
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Password</label>
             <input
@@ -150,6 +183,7 @@ const Register = () => {
               <small className="text-danger">{errors.password}</small>
             )}
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Vai trò</label>
             <input
@@ -159,6 +193,7 @@ const Register = () => {
               readOnly
             ></input>
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Giới tính</label>
             <select
@@ -171,6 +206,7 @@ const Register = () => {
               <option>Nữ</option>
             </select>
           </div>
+
           <div className="col-md-6">
             <label className="form-label">Số điện thoại</label>
             <input
@@ -182,6 +218,7 @@ const Register = () => {
             />
             {errors.sdt && <small className="text-danger">{errors.sdt}</small>}
           </div>
+
           <div className="col-12">
             <label className="form-label">Địa chỉ</label>
             <input

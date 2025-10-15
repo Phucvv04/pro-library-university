@@ -8,6 +8,7 @@ import {
   updateAuthor,
   deleteAuthor,
 } from "../../services/authorService";
+import { getBooks } from "../../services/bookService";
 
 import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
@@ -80,13 +81,28 @@ const Authors = () => {
       toast.info("Đã hủy xóa tác giả.");
       return;
     }
+
     try {
+      const booksRes = await getBooks();
+      const books = booksRes.data || [];
+
+      const hasLinkedBooks = books.some(
+        (book) =>
+          book.tenTacGia === authors.find((a) => a.maTacGia === id)?.tenTacGia
+      );
+
+      if (hasLinkedBooks) {
+        toast.error("Không thể xóa tác giả vì đang được liên kết với sách!");
+        return;
+      }
+
+      // Cho phép xóa nếu không có liên kết
       await deleteAuthor(id);
       toast.success("Xóa tác giả thành công!");
       fetchAuthors();
     } catch (err) {
-      toast.error("Lỗi khi xóa tác giả!");
       console.error(err);
+      toast.error("Lỗi khi xóa tác giả!");
     }
   };
 
@@ -117,12 +133,14 @@ const Authors = () => {
         <AddAuthorForm
           onSave={handleAddAuthor}
           onCancel={() => setShowForm(false)}
+          authors={authors}
         />
       )}
 
       {editingAuthor && (
         <UpdateAuthorForm
           author={editingAuthor}
+          authors={authors}
           onSave={handleUpdateAuthor}
           onClose={() => setEditingAuthor(null)}
         />

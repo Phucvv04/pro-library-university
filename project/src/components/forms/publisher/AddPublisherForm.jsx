@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 const AddPublisherForm = ({ onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     tenNhaXB: "",
@@ -12,7 +12,13 @@ const AddPublisherForm = ({ onSave, onCancel }) => {
       toast.error("Tên NXB không được bỏ trống");
       return;
     }
-    onSave(formData);
+    if (!formData.moTa.trim()) {
+      toast.error("Vui lòng nhập mô tả!");
+      return;
+    }
+    if (onSave) {
+      onSave(formData);
+    }
   };
 
   return (

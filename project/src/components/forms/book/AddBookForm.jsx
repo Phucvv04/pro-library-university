@@ -24,19 +24,33 @@ const AddBookForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!formData.tenSach.trim()) {
       toast.error("Tên sách không được để trống!");
       return;
     }
+
     if (!formData.tenTacGia || !formData.tenTheLoai || !formData.tenNhaXB) {
       toast.error("Vui lòng chọn tác giả, thể loại và NXB!");
       return;
     }
 
+    if (!formData.moTa.trim()) {
+      toast.error("Vui lòng nhập mô tả!");
+      return;
+    }
+
+    if (formData.soLuong <= 0) {
+      toast.error("Số lượng phải lớn hơn 0!");
+      return;
+    }
+
+    if (formData.soLuong > 1000) {
+      toast.error("Số lượng quá lớn!");
+      return;
+    }
+
     onSave(formData);
 
-    // reset form
     setFormData({
       tenSach: "",
       tenTacGia: "",
@@ -50,9 +64,8 @@ const AddBookForm = ({
   return (
     <div className="card mb-4 shadow-sm">
       <div className="card-body">
-        <h5 className="card-title mb-3">📚 Thêm sách mới</h5>
+        <h5 className="card-title mb-3">Thêm sách mới</h5>
         <form onSubmit={handleSubmit}>
-          {/* Tên sách */}
           <div className="mb-3">
             <label className="form-label">Tên sách</label>
             <input
@@ -62,11 +75,9 @@ const AddBookForm = ({
               onChange={handleChange}
               className="form-control"
               placeholder="Nhập tên sách"
-              required
             />
           </div>
 
-          {/* Tác giả */}
           <div className="mb-3">
             <label className="form-label">Tác giả</label>
             <select
@@ -74,7 +85,6 @@ const AddBookForm = ({
               value={formData.tenTacGia}
               onChange={handleChange}
               className="form-select"
-              required
             >
               <option value="">-- Chọn tác giả --</option>
               {authors.map((a) => (
@@ -85,7 +95,6 @@ const AddBookForm = ({
             </select>
           </div>
 
-          {/* Thể loại */}
           <div className="mb-3">
             <label className="form-label">Thể loại</label>
             <select
@@ -93,7 +102,6 @@ const AddBookForm = ({
               value={formData.tenTheLoai}
               onChange={handleChange}
               className="form-select"
-              required
             >
               <option value="">-- Chọn thể loại --</option>
               {categories.map((c) => (
@@ -104,7 +112,6 @@ const AddBookForm = ({
             </select>
           </div>
 
-          {/* Nhà xuất bản */}
           <div className="mb-3">
             <label className="form-label">Nhà xuất bản</label>
             <select
@@ -112,7 +119,6 @@ const AddBookForm = ({
               value={formData.tenNhaXB}
               onChange={handleChange}
               className="form-select"
-              required
             >
               <option value="">-- Chọn NXB --</option>
               {publishers.map((p) => (
@@ -122,8 +128,6 @@ const AddBookForm = ({
               ))}
             </select>
           </div>
-
-          {/* Mô tả */}
           <div className="mb-3">
             <label className="form-label">Mô tả</label>
             <textarea
@@ -136,21 +140,17 @@ const AddBookForm = ({
             />
           </div>
 
-          {/* Số lượng */}
           <div className="mb-3">
             <label className="form-label">Số lượng</label>
             <input
-              type="number"
               name="soLuong"
               value={formData.soLuong}
               onChange={handleChange}
               className="form-control"
               min="1"
-              required
             />
           </div>
 
-          {/* Buttons */}
           <div className="d-flex gap-2">
             <button type="submit" className="btn btn-success">
               Lưu

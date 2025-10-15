@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
-const UpdateCategoryForm = ({ category, onSave, onCancel }) => {
+import { toast } from "react-toastify";
+const UpdateCategoryForm = ({ category, categories = [], onSave, onClose }) => {
   const [formData, setFormData] = useState({
     maTheLoai: "",
     tenTheLoai: "",
@@ -26,10 +26,21 @@ const UpdateCategoryForm = ({ category, onSave, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.tenTheLoai.trim()) {
-      alert("Tên thể loại không được để trống!");
+      toast.error("Tên thể loại không được để trống!");
       return;
     }
-    onSave(formData); // gọi callback cập nhật
+    // Kiểm tra trùng tên (ngoại trừ chính NXB đang sửa)
+    const isDuplicate = categories.some(
+      (a) =>
+        a.maTheLoai !== formData.maTheLoai &&
+        a.tenTheLoai.trim().toLowerCase() ===
+          formData.tenTheLoai.trim().toLowerCase()
+    );
+    if (isDuplicate) {
+      toast.error("Thể loại này đã tồn tại trong hệ thống!");
+      return;
+    }
+    onSave(formData);
   };
 
   return (
@@ -54,7 +65,6 @@ const UpdateCategoryForm = ({ category, onSave, onCancel }) => {
             name="tenTheLoai"
             value={formData.tenTheLoai}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="mb-3">
@@ -67,16 +77,12 @@ const UpdateCategoryForm = ({ category, onSave, onCancel }) => {
             onChange={handleChange}
           />
         </div>
-        <div className="d-flex justify-content-end">
-          <button
-            type="button"
-            className="btn btn-secondary me-2"
-            onClick={onCancel}
-          >
-            Hủy
+        <div className="d-flex gap-2">
+          <button type="submit" className="btn btn-success">
+            Cập nhật
           </button>
-          <button type="submit" className="btn btn-primary">
-            Lưu thay đổi
+          <button type="button" className="btn btn-secondary" onClick={onClose}>
+            Hủy
           </button>
         </div>
       </form>

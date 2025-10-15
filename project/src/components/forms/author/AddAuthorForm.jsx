@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-const AddAuthorForm = ({ onSave, onCancel }) => {
+const AddAuthorForm = ({ onSave, onCancel, authors = [] }) => {
   const [formData, setFormData] = useState({
     tenTacGia: "",
     queQuan: "",
@@ -15,20 +15,40 @@ const AddAuthorForm = ({ onSave, onCancel }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!formData.tenTacGia.trim()) {
-      toast.error("Tên tác giả không được để trống!", {
-        toastId: "empty-author-name",
-      });
+      toast.error("Tên tác giả không được để trống!");
       return;
     }
+
+    const Regex = /^[a-zA-ZÀ-ỹ\s]+$/;
+    if (!Regex.test(formData.tenTacGia.trim())) {
+      toast.error("Tên tác giả không được chứa ký tự đặc biệt!");
+      return;
+    }
+
+    if (!formData.queQuan.trim()) {
+      toast.error("Vui lòng nhập quê quán!");
+      return;
+    }
+    const isDuplicate = authors.some(
+      (a) =>
+        a.tenTacGia.trim().toLowerCase() ===
+        formData.tenTacGia.trim().toLowerCase()
+    );
+    if (isDuplicate) {
+      toast.error("Tác giả này đã tồn tại!");
+      return;
+    }
+
     onSave(formData);
-    setFormData({ tenTacGia: "", queQuan: "", tieuSu: "" }); // reset form
+    setFormData({ tenTacGia: "", queQuan: "", tieuSu: "" });
   };
 
   return (
     <div className="card mb-4 shadow-sm">
       <div className="card-body">
-        <h5 className="card-title mb-3"> Thêm tác giả</h5>
+        <h5 className="card-title mb-3">Thêm tác giả</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Tên tác giả</label>

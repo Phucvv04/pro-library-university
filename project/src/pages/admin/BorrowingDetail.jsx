@@ -14,7 +14,7 @@ import UpdateBorrowDetailForm from "../../components/forms/borrowingdetail/Updat
 // 🔥 Thêm icon
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
-const BorrowDetail = () => {
+const BorrowingDetail = () => {
   const [borrowDetails, setBorrowDetails] = useState([]);
   const [borrows, setBorrows] = useState([]);
   const [books, setBooks] = useState([]);
@@ -33,7 +33,6 @@ const BorrowDetail = () => {
         getBooks(),
       ]);
 
-      // 🔥 Backend đã trả về cả maSach và tenSach
       setBorrowDetails(detailRes.data);
       setBorrows(borrowRes.data);
       setBooks(bookRes.data);
@@ -173,4 +172,4 @@ const BorrowDetail = () => {
   );
 };
 
-export default BorrowDetail;
+export default BorrowingDetail;

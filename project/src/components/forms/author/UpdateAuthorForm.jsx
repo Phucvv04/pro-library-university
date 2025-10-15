@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-const UpdateAuthorForm = ({ author, onSave, onClose }) => {
+const UpdateAuthorForm = ({ author, authors = [], onSave, onClose }) => {
   const [formData, setFormData] = useState({
     maTacGia: "",
     tenTacGia: "",
@@ -22,10 +22,32 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Kiểm tra rỗng
     if (!formData.tenTacGia.trim()) {
       toast.error("Tên tác giả không được để trống!");
       return;
     }
+
+    // Regex kiểm tra ký tự đặc biệt
+    const Regex = /^[a-zA-ZÀ-ỹ\s]+$/;
+    if (!Regex.test(formData.tenTacGia.trim())) {
+      toast.error("Tên tác giả không được chứa ký tự đặc biệt!");
+      return;
+    }
+
+    // Kiểm tra trùng tên (ngoại trừ chính tác giả đang sửa)
+    const isDuplicate = authors.some(
+      (a) =>
+        a.maTacGia !== formData.maTacGia && // bỏ qua chính mình
+        a.tenTacGia.trim().toLowerCase() ===
+          formData.tenTacGia.trim().toLowerCase()
+    );
+    if (isDuplicate) {
+      toast.error("Tác giả này đã tồn tại trong hệ thống!");
+      return;
+    }
+
     onSave(formData);
   };
 
@@ -34,7 +56,7 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
   return (
     <div className="card mb-4 shadow-sm">
       <div className="card-body">
-        <h5 className="card-title mb-3"> Cập nhật tác giả</h5>
+        <h5 className="card-title mb-3">Cập nhật tác giả</h5>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Mã tác giả</label>
@@ -46,6 +68,7 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
               disabled
             />
           </div>
+
           <div className="mb-3">
             <label className="form-label">Tên tác giả</label>
             <input
@@ -54,8 +77,10 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
               value={formData.tenTacGia}
               onChange={handleChange}
               className="form-control"
+              placeholder="Nhập tên tác giả"
             />
           </div>
+
           <div className="mb-3">
             <label className="form-label">Quê quán</label>
             <input
@@ -64,8 +89,10 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
               value={formData.queQuan}
               onChange={handleChange}
               className="form-control"
+              placeholder="Nhập quê quán"
             />
           </div>
+
           <div className="mb-3">
             <label className="form-label">Tiểu sử</label>
             <textarea
@@ -74,8 +101,10 @@ const UpdateAuthorForm = ({ author, onSave, onClose }) => {
               onChange={handleChange}
               className="form-control"
               rows="3"
+              placeholder="Nhập tiểu sử"
             />
           </div>
+
           <div className="d-flex gap-2">
             <button type="submit" className="btn btn-primary">
               Cập nhật
