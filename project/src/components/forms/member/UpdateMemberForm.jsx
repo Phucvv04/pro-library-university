@@ -1,9 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
-  const [formData, setFormData] = useState({ ...member });
+  const [formData, setFormData] = useState({
+    maNguoiDung: "",
+    tenNguoiDung: "",
+    email: "",
+    username: "",
+    password: "",
+    gioiTinh: "",
+    vaiTro: "Độc giả",
+    sdt: "",
+    diaChi: "",
+  });
 
+  useEffect(() => {
+    setFormData({
+      maNguoiDung: member.maNguoiDung || "",
+      tenNguoiDung: member.tenNguoiDung || "",
+      email: member.email || "",
+      username: member.username || "",
+      password: member.password || "",
+      gioiTinh: member.gioiTinh || "",
+      vaiTro: member.vaiTro || "Độc giả",
+      sdt: member.sdt || "",
+      diaChi: member.diaChi || "",
+    });
+  }, [member]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -44,10 +67,10 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
       toast.error("Email không hợp lệ!");
       return;
     }
-    if (password.trim().length < 6) {
-      toast.error("Mật khẩu không hợp lệ!");
-      return;
-    }
+    // if (password.trim().length < 6) {
+    //   toast.error("Mật khẩu không hợp lệ!");
+    //   return;
+    // }
 
     const phoneRegex = /^[0-9]+$/;
     if (
@@ -64,7 +87,6 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
     }
 
     onSave(formData);
-    toast.success("Cập nhật người dùng thành công!");
   };
 
   return (
@@ -79,7 +101,7 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="text"
                 name="tenNguoiDung"
                 className="form-control"
-                value={formData.tenNguoiDung || ""}
+                value={formData.tenNguoiDung}
                 onChange={handleChange}
                 required
               />
@@ -91,7 +113,7 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="email"
                 name="email"
                 className="form-control"
-                value={formData.email || ""}
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
@@ -103,9 +125,9 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="text"
                 name="username"
                 className="form-control"
-                value={formData.username || ""}
+                value={formData.username}
                 onChange={handleChange}
-                required
+                readOnly
               />
             </div>
 
@@ -115,9 +137,9 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="password"
                 name="password"
                 className="form-control"
-                value={formData.password || ""}
+                value={formData.password}
                 onChange={handleChange}
-                required
+                readOnly
               />
             </div>
 
@@ -126,7 +148,7 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
               <select
                 name="vaiTro"
                 className="form-select"
-                value={formData.vaiTro || ""}
+                value={formData.vaiTro}
                 onChange={handleChange}
               >
                 <option value="Độc giả">Độc giả</option>
@@ -140,10 +162,9 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
               <select
                 name="gioiTinh"
                 className="form-select"
-                value={formData.gioiTinh || ""}
+                value={formData.gioiTinh}
                 onChange={handleChange}
               >
-                <option value="">--Chọn--</option>
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
               </select>
@@ -155,7 +176,7 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="text"
                 name="sdt"
                 className="form-control"
-                value={formData.sdt || ""}
+                value={formData.sdt}
                 onChange={handleChange}
               />
             </div>
@@ -166,22 +187,22 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
                 type="text"
                 name="diaChi"
                 className="form-control"
-                value={formData.diaChi || ""}
+                value={formData.diaChi}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="mt-3 d-flex justify-content-end">
+          <div className="d-flex gap-2 mt-3">
+            <button type="submit" className="btn btn-success">
+              Cập nhật
+            </button>
             <button
               type="button"
-              className="btn btn-secondary me-2"
+              className="btn btn-secondary"
               onClick={onClose}
             >
               Hủy
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Cập nhật
             </button>
           </div>
         </form>

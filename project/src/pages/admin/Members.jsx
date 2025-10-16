@@ -9,7 +9,7 @@ import {
   deleteMember,
 } from "../../services/memberService";
 
-// Import icon
+import { getBorrows } from "../../services/borrowingService";
 import { FaSearch, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const Members = () => {
@@ -18,13 +18,11 @@ const Members = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Quản lý form
-  const [showForm, setShowForm] = useState(false); // Thêm mới
-  const [editingMember, setEditingMember] = useState(null); // Sửa
+  const [showForm, setShowForm] = useState(false);
+  const [editingMember, setEditingMember] = useState(null);
 
   const memberRoles = ["all", "Độc giả", "Thủ thư", "Quản lý"];
 
-  // Gọi API lấy danh sách
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -99,6 +97,21 @@ const Members = () => {
       return;
     }
     try {
+      const borrowsRes = await getBorrows();
+      const borrows = borrowsRes.data || [];
+
+      const hasLinkedBorrows = borrows.some(
+        (borrow) =>
+          borrow.tenNguoiDung ===
+          members.find((a) => a.maNguoiDung === id)?.tenNguoiDung
+      );
+
+      if (hasLinkedBorrows) {
+        toast.error(
+          "Không thể xóa người dùng vì đang được liên kết với mượn trả!"
+        );
+        return;
+      }
       await deleteMember(id);
       toast.success("Xóa người dùng thành công!");
       fetchMembers();

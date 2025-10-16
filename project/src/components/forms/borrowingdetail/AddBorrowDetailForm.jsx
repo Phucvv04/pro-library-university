@@ -8,7 +8,7 @@ export default function AddBorrowDetailForm({
 }) {
   const [formData, setFormData] = useState({
     maMuon: borrows[0]?.maMuon || "",
-    tenSach: books[0]?.tenSach || "",
+    maSach: books[0]?.maSach || "",
     soLuong: 1,
   });
 
@@ -47,13 +47,13 @@ export default function AddBorrowDetailForm({
           <div className="col-md-6">
             <label className="form-label">Sách</label>
             <select
-              name="tenSach"
+              name="maSach"
               className="form-select"
-              value={formData.tenSach}
+              value={formData.maSach}
               onChange={handleChange}
             >
               {books.map((b) => (
-                <option key={b.maSach} value={b.tenSach}>
+                <option key={b.maSach} value={b.maSach}>
                   {b.maSach?.substring(18, 24)} - {b.tenSach}
                 </option>
               ))}
@@ -72,7 +72,7 @@ export default function AddBorrowDetailForm({
             />
           </div>
 
-          <div className="col-12 d-flex justify-content-end gap-2 mt-3">
+          <div className=" d-flex  gap-2 mt-3">
             <button type="submit" className="btn btn-success">
               Lưu
             </button>
