@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import { toast } from "react-toastify";
 
 const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
@@ -10,9 +11,22 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
     trangThai: "Đang mượn",
   });
 
+  // 🔹 Chuyển danh sách người dùng thành định dạng react-select
+  const userOptions = members.map((u) => ({
+    value: u.maNguoiDung,
+    label: `${u.tenNguoiDung} (${u.email})`,
+  }));
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (selected) => {
+    setFormData((prev) => ({
+      ...prev,
+      maNguoiDung: selected ? selected.value : "",
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -31,19 +45,16 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
       return;
     }
 
-    // ✅ Tìm tên người dùng từ danh sách members
     const selectedUser = members.find(
       (u) => u.maNguoiDung === formData.maNguoiDung
     );
-
     if (!selectedUser) {
       toast.error("Không tìm thấy thông tin người dùng!");
       return;
     }
 
-    // ✅ Payload gửi lên backend (giữ nguyên `tenNguoiDung`)
     const payload = {
-      tenNguoiDung: selectedUser.tenNguoiDung, // backend cần tên
+      tenNguoiDung: selectedUser.tenNguoiDung,
       ngayMuon: formData.ngayMuon,
       ngayTraDuKien: formData.ngayTraDuKien,
       ngayTraThucTe: formData.ngayTraThucTe || null,
@@ -52,7 +63,6 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
 
     onSave(payload);
 
-    // Reset form
     setFormData({
       maNguoiDung: "",
       ngayMuon: "",
@@ -72,20 +82,18 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
           {/* Người dùng */}
           <div className="mb-3">
             <label className="form-label">Người dùng</label>
-            <select
-              name="maNguoiDung"
-              value={formData.maNguoiDung}
-              onChange={handleChange}
-              className="form-select"
-              required
-            >
-              <option value="">-- Chọn người dùng --</option>
-              {members.map((u) => (
-                <option key={u.maNguoiDung} value={u.maNguoiDung}>
-                  {u.tenNguoiDung} ({u.email})
-                </option>
-              ))}
-            </select>
+            <Select
+              options={userOptions}
+              onChange={handleSelectChange}
+              value={
+                userOptions.find((opt) => opt.value === formData.maNguoiDung) ||
+                null
+              }
+              placeholder="Nhập hoặc chọn người dùng..."
+              isSearchable
+              isClearable
+              noOptionsMessage={() => "Không tìm thấy người dùng"}
+            />
           </div>
 
           {/* Ngày mượn */}
