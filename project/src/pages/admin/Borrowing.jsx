@@ -29,7 +29,40 @@ const Borrowing = () => {
         getBorrows(),
         getMembers(),
       ]);
-      setBorrows(borrowRes.data);
+
+      const today = new Date();
+
+      //  Kiểm tra từng phiếu xem có quá hạn không
+      const updatedBorrows = await Promise.all(
+        borrowRes.data.map(async (borrow) => {
+          const ngayTraDuKien = new Date(borrow.ngayTraDuKien);
+          const ngayTraThucTe = borrow.ngayTraThucTe
+            ? new Date(borrow.ngayTraThucTe)
+            : null;
+
+          // Nếu chưa trả và quá hạn ->cập nhật trạng thái
+          if (
+            !ngayTraThucTe &&
+            ngayTraDuKien < today &&
+            borrow.trangThai !== "Quá hạn"
+          ) {
+            try {
+              const updated = {
+                ...borrow,
+                trangThai: "Quá hạn",
+              };
+              await updateBorrow(borrow.maMuon, updated);
+              return updated;
+            } catch (err) {
+              console.error("Lỗi khi cập nhật trạng thái quá hạn:", err);
+              return borrow;
+            }
+          }
+          return borrow;
+        })
+      );
+
+      setBorrows(updatedBorrows);
       setMembers(memberRes.data);
     } catch (error) {
       console.error(error);
@@ -51,10 +84,19 @@ const Borrowing = () => {
   };
 
   const handleDelete = async (maMuon) => {
+    const borrow = borrows.find((b) => b.maMuon === maMuon);
+
+    // 🔹 Kiểm tra trạng thái "Đang mượn"
+    if (borrow && borrow.trangThai === "Đang mượn") {
+      toast.error("Không thể xóa phiếu đang mượn! Vui lòng trả sách trước.");
+      return;
+    }
+
     if (!window.confirm("Bạn có chắc muốn xóa phiếu mượn này?")) {
       toast.info("Đã hủy xóa phiếu mượn.");
       return;
     }
+
     try {
       await deleteBorrow(maMuon);
       setBorrows((prev) => prev.filter((b) => b.maMuon !== maMuon));

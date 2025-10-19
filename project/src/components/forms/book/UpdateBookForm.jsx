@@ -15,7 +15,7 @@ export default function UpdateBookForm({
     tenTheLoai: "",
     tenNhaXB: "",
     moTa: "",
-    soLuong: 1,
+    soLuong: "",
   });
 
   useEffect(() => {
@@ -47,7 +47,10 @@ export default function UpdateBookForm({
       toast.error("Vui lòng chọn tác giả, thể loại và NXB!");
       return;
     }
-
+    if (formData.soLuong > 1000) {
+      toast.error("Số lượng quá lớn!");
+      return;
+    }
     try {
       await onSave(formData);
     } catch (err) {
@@ -59,7 +62,7 @@ export default function UpdateBookForm({
   return (
     <div className="card mb-4 shadow-sm">
       <div className="card-body">
-        <h5 className="card-title mb-3">✏️ Cập nhật sách</h5>
+        <h5 className="card-title mb-3"> Cập nhật sách</h5>
         <form onSubmit={handleSubmit}>
           {/* Tên sách */}
           <div className="mb-3">
@@ -144,13 +147,11 @@ export default function UpdateBookForm({
           <div className="mb-3">
             <label className="form-label">Số lượng</label>
             <input
-              type="number"
+              type="text"
               name="soLuong"
               value={formData.soLuong}
               onChange={handleChange}
               className="form-control"
-              min="1"
-              required
             />
           </div>
 

@@ -120,7 +120,7 @@ const UpdateMemberForm = ({ member, onSave, onClose, existingUsers = [] }) => {
             </div>
 
             <div className="col-md-6">
-              <label className="form-label">Username</label>
+              <label className="form-label ">Username</label>
               <input
                 type="text"
                 name="username"

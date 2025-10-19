@@ -45,6 +45,14 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
       return;
     }
 
+    //  Kiểm tra ngày trả dự kiến phải >= ngày mượn
+    const ngayMuon = new Date(formData.ngayMuon);
+    const ngayTraDuKien = new Date(formData.ngayTraDuKien);
+    if (ngayTraDuKien < ngayMuon) {
+      toast.error("Ngày trả dự kiến không được nhỏ hơn ngày mượn!");
+      return;
+    }
+
     const selectedUser = members.find(
       (u) => u.maNguoiDung === formData.maNguoiDung
     );

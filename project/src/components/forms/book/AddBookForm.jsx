@@ -147,7 +147,6 @@ const AddBookForm = ({
               value={formData.soLuong}
               onChange={handleChange}
               className="form-control"
-              min="1"
             />
           </div>
 

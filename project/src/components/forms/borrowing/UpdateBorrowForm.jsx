@@ -11,6 +11,7 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!formData.ngayMuon) {
       toast.error("Ngày mượn không được để trống!");
       return;
@@ -18,6 +19,17 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
     if (!formData.ngayTraDuKien) {
       toast.error("Ngày trả dự kiến không được để trống!");
       return;
+    }
+
+    // 🔹 Kiểm tra nếu có ngày trả thực tế thì không được nhỏ hơn ngày mượn
+    if (formData.ngayTraThucTe) {
+      const ngayMuon = new Date(formData.ngayMuon);
+      const ngayTraThucTe = new Date(formData.ngayTraThucTe);
+
+      if (ngayTraThucTe < ngayMuon) {
+        toast.error("Ngày trả thực tế không được nhỏ hơn ngày mượn!");
+        return;
+      }
     }
 
     onSave(formData);
@@ -37,6 +49,7 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
               disabled
             />
           </div>
+
           <div className="mb-3">
             <label className="form-label">Người dùng</label>
             <input
