@@ -87,7 +87,7 @@ const BorrowingDetail = () => {
     }
   };
 
-  // 🔍 Lọc danh sách theo từ khóa tìm kiếm
+  //Lọc danh sách theo từ khóa tìm kiếm
   const filteredDetails = borrowDetails.filter((d) =>
     d.tenNguoiDung?.toLowerCase().includes(searchTerm.toLowerCase())
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
+const UpdateBorrowForm = ({ borrow, onSave, onClose }) => {
   const [formData, setFormData] = useState({ ...borrow });
 
   const handleChange = (e) => {
@@ -15,11 +15,8 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
         const ngayTraThucTe = new Date(value);
         const ngayTraDuKien = new Date(prev.ngayTraDuKien);
 
-        if (ngayTraThucTe > ngayTraDuKien) {
-          updated.trangThai = "Quá hạn";
-        } else {
-          updated.trangThai = "Đã trả";
-        }
+        updated.trangThai =
+          ngayTraThucTe > ngayTraDuKien ? "Quá hạn" : "Đã trả";
       }
 
       // Nếu xóa ngày trả thực tế -> quay lại trạng thái “Đang mượn”
@@ -34,38 +31,53 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.ngayMuon) {
+    const { ngayMuon, ngayTraDuKien, ngayTraThucTe } = formData;
+
+    if (!ngayMuon) {
       toast.error("Ngày mượn không được để trống!");
       return;
     }
 
-    if (!formData.ngayTraDuKien) {
+    if (!ngayTraDuKien) {
       toast.error("Ngày trả dự kiến không được để trống!");
       return;
     }
 
-    const ngayMuon = new Date(formData.ngayMuon);
-    const ngayTraDuKien = new Date(formData.ngayTraDuKien);
+    const dMuon = new Date(ngayMuon);
+    const dDuKien = new Date(ngayTraDuKien);
 
-    if (ngayTraDuKien < ngayMuon) {
+    if (dDuKien < dMuon) {
       toast.error("Ngày trả dự kiến không được nhỏ hơn ngày mượn!");
       return;
     }
-    if (formData.ngayTraThucTe) {
-      const ngayTraThucTe = new Date(formData.ngayTraThucTe);
-      if (ngayTraThucTe < ngayMuon) {
+
+    if (ngayTraThucTe) {
+      const dThucTe = new Date(ngayTraThucTe);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dThucTe.setHours(0, 0, 0, 0);
+
+      if (dThucTe < dMuon) {
         toast.error("Ngày trả thực tế không được nhỏ hơn ngày mượn!");
         return;
       }
 
-      const todayStr = new Date().toISOString().substring(0, 10);
-      if (formData.ngayTraThucTe > todayStr) {
+      if (dThucTe > today) {
         toast.error("Ngày trả thực tế không được lớn hơn ngày hiện tại!");
         return;
       }
     }
 
-    onSave(formData);
+    const payload = {
+      ...formData,
+      ngayMuon: new Date(formData.ngayMuon).toISOString(),
+      ngayTraDuKien: new Date(formData.ngayTraDuKien).toISOString(),
+      ngayTraThucTe: formData.ngayTraThucTe
+        ? new Date(formData.ngayTraThucTe).toISOString()
+        : null,
+    };
+
+    onSave(payload);
   };
 
   return (
@@ -73,22 +85,24 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
       <div className="card-body">
         <h5 className="card-title mb-3">Sửa phiếu mượn</h5>
         <form onSubmit={handleSubmit}>
+          {/* Mã mượn */}
           <div className="mb-3">
             <label className="form-label">Mã mượn</label>
             <input
               type="text"
               className="form-control"
-              value={`${formData.maMuon.substring(0, 6)}`}
+              value={formData.maMuon?.substring(0, 6) || ""}
               disabled
             />
           </div>
 
+          {/* Người dùng */}
           <div className="mb-3">
             <label className="form-label">Người dùng</label>
             <input
               type="text"
               className="form-control"
-              value={`${formData.tenNguoiDung}`}
+              value={formData.tenNguoiDung || ""}
               disabled
             />
           </div>
@@ -99,7 +113,7 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
             <input
               type="date"
               name="ngayMuon"
-              value={formData.ngayMuon?.substring(0, 10)}
+              value={formData.ngayMuon?.substring(0, 10) || ""}
               onChange={handleChange}
               className="form-control"
               required
@@ -112,7 +126,7 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
             <input
               type="date"
               name="ngayTraDuKien"
-              value={formData.ngayTraDuKien?.substring(0, 10)}
+              value={formData.ngayTraDuKien?.substring(0, 10) || ""}
               onChange={handleChange}
               className="form-control"
               required
@@ -141,11 +155,12 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
             <input
               type="text"
               className="form-control"
-              value={formData.trangThai}
+              value={formData.trangThai || ""}
               disabled
             />
           </div>
 
+          {/* Nút hành động */}
           <div className="d-flex gap-2">
             <button type="submit" className="btn btn-primary">
               Cập nhật
