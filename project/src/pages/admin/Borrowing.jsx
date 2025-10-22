@@ -18,6 +18,7 @@ const Borrowing = () => {
   const [members, setMembers] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingBorrow, setEditingBorrow] = useState(null);
+  const [activeTab, setActiveTab] = useState("Đang mượn"); // 💡 Trạng thái tab hiện tại
 
   useEffect(() => {
     fetchData();
@@ -32,7 +33,7 @@ const Borrowing = () => {
 
       const today = new Date();
 
-      //  Kiểm tra từng phiếu xem có quá hạn không
+      // 🔹 Cập nhật trạng thái quá hạn tự động
       const updatedBorrows = await Promise.all(
         borrowRes.data.map(async (borrow) => {
           const ngayTraDuKien = new Date(borrow.ngayTraDuKien);
@@ -40,17 +41,13 @@ const Borrowing = () => {
             ? new Date(borrow.ngayTraThucTe)
             : null;
 
-          // Nếu chưa trả và quá hạn ->cập nhật trạng thái
           if (
             !ngayTraThucTe &&
             ngayTraDuKien < today &&
             borrow.trangThai !== "Quá hạn"
           ) {
             try {
-              const updated = {
-                ...borrow,
-                trangThai: "Quá hạn",
-              };
+              const updated = { ...borrow, trangThai: "Quá hạn" };
               await updateBorrow(borrow.maMuon, updated);
               return updated;
             } catch (err) {
@@ -113,10 +110,9 @@ const Borrowing = () => {
       toast.error("Lỗi khi cập nhật phiếu mượn!");
     }
   };
+
   const handleDelete = async (maMuon) => {
     const borrow = borrows.find((b) => b.maMuon === maMuon);
-
-    // 🔹 Kiểm tra trạng thái "Đang mượn"
     if (borrow && borrow.trangThai === "Đang mượn") {
       toast.error("Không thể xóa phiếu đang mượn! Vui lòng trả sách trước.");
       return;
@@ -136,11 +132,15 @@ const Borrowing = () => {
       toast.error("Lỗi khi xóa phiếu mượn!");
     }
   };
+
+  //  Bộ lọc tìm kiếm + tab trạng thái
   const filteredBorrows = borrows.filter(
     (b) =>
-      (b.tenNguoiDung &&
+      ((b.tenNguoiDung &&
         b.tenNguoiDung.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (b.maMuon && b.maMuon.toLowerCase().includes(searchTerm.toLowerCase()))
+        (b.maMuon &&
+          b.maMuon.toLowerCase().includes(searchTerm.toLowerCase()))) &&
+      b.trangThai === activeTab
   );
 
   return (
@@ -160,25 +160,41 @@ const Borrowing = () => {
       </div>
 
       {!showAddForm && !editingBorrow && (
-        <div className="mb-3 position-relative">
-          <FaSearch
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "12px",
-              transform: "translateY(-50%)",
-              color: "#888",
-              pointerEvents: "none",
-            }}
-          />
-          <input
-            type="text"
-            className="form-control ps-5"
-            placeholder="Tìm theo mã mượn hoặc tên người dùng..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <>
+          <div className="mb-3 position-relative">
+            <FaSearch
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "12px",
+                transform: "translateY(-50%)",
+                color: "#888",
+                pointerEvents: "none",
+              }}
+            />
+            <input
+              type="text"
+              className="form-control ps-5"
+              placeholder="Tìm theo mã mượn hoặc tên người dùng..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          {/*  Tabs phân loại trạng thái */}
+          <ul className="nav nav-tabs mb-3">
+            {["Đang mượn", "Đã trả", "Quá hạn"].map((tab) => (
+              <li className="nav-item " key={tab}>
+                <button
+                  className={`nav-link ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
 
       {showAddForm && (
@@ -260,7 +276,7 @@ const Borrowing = () => {
                   {filteredBorrows.length === 0 && (
                     <tr>
                       <td colSpan="7" className="text-center text-muted">
-                        Không có dữ liệu
+                        Không có dữ liệu cho trạng thái "{activeTab}"
                       </td>
                     </tr>
                   )}
