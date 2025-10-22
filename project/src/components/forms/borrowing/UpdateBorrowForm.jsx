@@ -22,7 +22,7 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
         }
       }
 
-      // Nếu xóa ngày trả thực tế → quay lại trạng thái “Đang mượn”
+      // Nếu xóa ngày trả thực tế -> quay lại trạng thái “Đang mượn”
       if (name === "ngayTraThucTe" && !value) {
         updated.trangThai = "Đang mượn";
       }
@@ -51,14 +51,18 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
       toast.error("Ngày trả dự kiến không được nhỏ hơn ngày mượn!");
       return;
     }
-    if (!formData.ngayTraThucTe) {
-      toast.error("Ngày trả thực tế không được để trống!");
-      return;
-    }
     if (formData.ngayTraThucTe) {
       const ngayTraThucTe = new Date(formData.ngayTraThucTe);
       if (ngayTraThucTe < ngayMuon) {
         toast.error("Ngày trả thực tế không được nhỏ hơn ngày mượn!");
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (ngayTraThucTe > today) {
+        toast.error("Ngày trả thực tế không được lớn hơn ngày hiện tại!");
         return;
       }
     }

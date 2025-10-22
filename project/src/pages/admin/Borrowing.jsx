@@ -73,13 +73,13 @@ const Borrowing = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case "Đang mượn":
-        return "bg-success";
+        return "bg-success text-dark";
       case "Quá hạn":
-        return "bg-danger";
+        return "bg-danger text-dark";
       case "Đã trả":
         return "bg-warning text-dark";
       default:
-        return "bg-secondary";
+        return "bg-secondary text-dark";
     }
   };
 

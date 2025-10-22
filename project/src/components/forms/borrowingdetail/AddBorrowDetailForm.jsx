@@ -36,7 +36,7 @@ export default function AddBorrowDetailForm({
     return { ...book, soLuongConLai };
   });
 
-  // 2️⃣ Option cho select
+  // Option cho select
   const borrowOptions = borrows.map((b) => ({
     value: b.maMuon,
     label: `${b.maMuon?.substring(18, 24)} - ${b.tenNguoiDung}`,
@@ -49,7 +49,7 @@ export default function AddBorrowDetailForm({
     })`,
   }));
 
-  // 3️⃣ Xử lý chọn và nhập
+  // Xử lý chọn và nhập
   const handleBorrowChange = (selected) => {
     setFormData((prev) => ({
       ...prev,
@@ -69,7 +69,7 @@ export default function AddBorrowDetailForm({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 4️⃣ Submit form
+  // Submit form
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -101,8 +101,6 @@ export default function AddBorrowDetailForm({
 
     onSave(formData);
   };
-
-  // 5️⃣ JSX
   return (
     <div className="card shadow-sm border-0 rounded-3 mb-4">
       <div className="card-header bg-primary text-white fw-bold">

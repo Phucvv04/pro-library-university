@@ -140,11 +140,13 @@ const Statistics = () => {
                       <span
                         className={`badge ${
                           borrow?.trangThai === "Quá hạn"
-                            ? "bg-danger"
-                            : "bg-success"
+                            ? "bg-danger text-dark"
+                            : borrow?.trangThai === "Đã trả"
+                            ? "bg-warning text-dark"
+                            : "bg-success text-dark"
                         }`}
                       >
-                        {borrow?.trangThai || "Đúng hạn"}
+                        {borrow?.trangThai}
                       </span>
                     </td>
                   </tr>

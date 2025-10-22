@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { getMembers } from "../../../services/memberService";
 
 const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
     username: "",
     password: "",
     vaiTro: "Độc giả",
-    gioiTinh: "",
+    gioiTinh: "Nam",
     sdt: "",
     diaChi: "",
   });
@@ -18,7 +19,7 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { tenNguoiDung, email, username, password, sdt, diaChi } = formData;
 
@@ -43,22 +44,6 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
       return;
     }
 
-    const isUsernameExist = existingUsers.some(
-      (u) => u.username.trim().toLowerCase() === username.trim().toLowerCase()
-    );
-    if (isUsernameExist) {
-      toast.error("Tên đăng nhập đã tồn tại!");
-      return;
-    }
-
-    const isEmailExist = existingUsers.some(
-      (u) => u.email.trim().toLowerCase() === email.trim().toLowerCase()
-    );
-    if (isEmailExist) {
-      toast.error("Email đã được sử dụng!");
-      return;
-    }
-
     if (!password.trim()) {
       toast.error("Vui lòng nhập mật khẩu!");
       return;
@@ -73,7 +58,7 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
     }
 
     const phoneRegex = /^[0-9]+$/;
-    if (!phoneRegex.test(sdt) || !sdt.startsWith("0") || sdt.length < 10) {
+    if (!phoneRegex.test(sdt) || !sdt.startsWith("0") || sdt.length !== 10) {
       toast.error("Số điện thoại không hợp lệ!");
       return;
     }
@@ -83,19 +68,55 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
       return;
     }
 
-    onSave(formData);
-    toast.success("Thêm người dùng thành công!");
+    try {
+      const res = await getMembers();
+      const users = res.data;
 
-    setFormData({
-      tenNguoiDung: "",
-      email: "",
-      username: "",
-      password: "",
-      vaiTro: "Độc giả",
-      gioiTinh: "",
-      sdt: "",
-      diaChi: "",
-    });
+      const isUsernameExist = users.some(
+        (u) =>
+          u.username?.trim().toLowerCase() === username.trim().toLowerCase()
+      );
+      if (isUsernameExist) {
+        toast.error("Username đã tồn tại!");
+        return;
+      }
+
+      const isPasswordExist = users.some(
+        (u) =>
+          u.password?.trim().toLowerCase() === password.trim().toLowerCase()
+      );
+      if (isPasswordExist) {
+        toast.error("Mật khẩu đã tồn tại!");
+        return;
+      }
+
+      const isEmailExist = users.some(
+        (u) => u.email?.trim().toLowerCase() === email.trim().toLowerCase()
+      );
+      if (isEmailExist) {
+        toast.error("Email đã được sử dụng!");
+        return;
+      }
+      const isPhoneExist = users.some((u) => u.sdt?.trim() === sdt.trim());
+      if (isPhoneExist) {
+        toast.error("Số điện thoại đã tồn tại!");
+        return;
+      }
+      await onSave(formData);
+
+      setFormData({
+        tenNguoiDung: "",
+        email: "",
+        username: "",
+        password: "",
+        vaiTro: "Độc giả",
+        gioiTinh: "Nam",
+        sdt: "",
+        diaChi: "",
+      });
+    } catch (error) {
+      console.error("Lỗi khi thêm người dùng:", error);
+    }
   };
 
   return (
