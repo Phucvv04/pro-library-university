@@ -23,14 +23,6 @@ const Guide = () => {
           trực tuyến. Sau đó, đến quầy thủ thư để nhận sách.
         </p>
       </div>
-
-      <div className="card-custom mt-3">
-        <h5 className="card-title">Gia hạn sách</h5>
-        <p className="card-text">
-          Trước ngày hết hạn, bạn có thể gửi yêu cầu gia hạn qua hệ thống. Mỗi
-          sách được gia hạn tối đa 2 lần.
-        </p>
-      </div>
     </div>
   );
 };

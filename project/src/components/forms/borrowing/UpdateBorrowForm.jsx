@@ -58,10 +58,8 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
         return;
       }
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if (ngayTraThucTe > today) {
+      const todayStr = new Date().toISOString().substring(0, 10);
+      if (formData.ngayTraThucTe > todayStr) {
         toast.error("Ngày trả thực tế không được lớn hơn ngày hiện tại!");
         return;
       }
