@@ -10,9 +10,7 @@ import { getBorrows } from "../../services/borrowingService";
 import { getBooks } from "../../services/bookService";
 import AddBorrowDetailForm from "../../components/forms/borrowingdetail/AddBorrowDetailForm";
 import UpdateBorrowDetailForm from "../../components/forms/borrowingdetail/UpdateBorrowDetailForm";
-
-// 🔥 Thêm icon
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 const BorrowingDetail = () => {
   const [borrowDetails, setBorrowDetails] = useState([]);
@@ -20,6 +18,7 @@ const BorrowingDetail = () => {
   const [books, setBooks] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingDetail, setEditingDetail] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -32,8 +31,15 @@ const BorrowingDetail = () => {
         getBorrows(),
         getBooks(),
       ]);
+      const borrowMap = new Map(
+        borrowRes.data.map((b) => [b.maMuon, b.tenNguoiDung])
+      );
+      const mergedDetails = detailRes.data.map((d) => ({
+        ...d,
+        tenNguoiDung: borrowMap.get(d.maMuon) || "Không xác định",
+      }));
 
-      setBorrowDetails(detailRes.data);
+      setBorrowDetails(mergedDetails);
       setBorrows(borrowRes.data);
       setBooks(bookRes.data);
     } catch (error) {
@@ -47,7 +53,7 @@ const BorrowingDetail = () => {
       await createBorrowDetail(newDetail);
       toast.success("Thêm chi tiết mượn thành công!");
       setShowAddForm(false);
-      fetchData(); // 🔥 load lại list mới
+      fetchData();
     } catch (error) {
       console.error(error);
       toast.error("Lỗi khi thêm chi tiết mượn!");
@@ -59,7 +65,7 @@ const BorrowingDetail = () => {
       await updateBorrowDetail(updatedDetail.maMuonCT, updatedDetail);
       toast.success("Cập nhật chi tiết mượn thành công!");
       setEditingDetail(null);
-      fetchData(); // 🔥 load lại list mới
+      fetchData();
     } catch (error) {
       console.error(error);
       toast.error("Lỗi khi cập nhật chi tiết mượn!");
@@ -74,12 +80,17 @@ const BorrowingDetail = () => {
     try {
       await deleteBorrowDetail(maMuonCT);
       toast.success("Xóa thành công!");
-      fetchData(); // 🔥 load lại list mới
+      fetchData();
     } catch (error) {
       console.error(error);
       toast.error("Lỗi khi xóa!");
     }
   };
+
+  // 🔍 Lọc danh sách theo từ khóa tìm kiếm
+  const filteredDetails = borrowDetails.filter((d) =>
+    d.tenNguoiDung?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="borrow-detail-page">
@@ -87,6 +98,7 @@ const BorrowingDetail = () => {
         <h2 className="fw-bold" style={{ color: "var(--primary-blue)" }}>
           Mượn Trả Chi Tiết
         </h2>
+
         {!showAddForm && !editingDetail && (
           <button
             className="btn btn-primary d-flex align-items-center gap-2"
@@ -97,11 +109,34 @@ const BorrowingDetail = () => {
         )}
       </div>
 
+      {!showAddForm && !editingDetail && (
+        <div className="mb-3 position-relative">
+          <FaSearch
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "12px",
+              transform: "translateY(-50%)",
+              color: "#888",
+              pointerEvents: "none",
+            }}
+          />
+          <input
+            type="text"
+            className="form-control ps-5"
+            placeholder="Tìm theo tên người dùng"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      )}
+
       {showAddForm && (
         <AddBorrowDetailForm
           onSave={handleAdd}
           borrows={borrows}
           books={books}
+          borrowDetails={borrowDetails}
           onClose={() => setShowAddForm(false)}
         />
       )}
@@ -125,40 +160,45 @@ const BorrowingDetail = () => {
                   <tr>
                     <th>Mã chi tiết</th>
                     <th>Mã mượn</th>
+                    <th>Tên độc giả</th>
                     <th>Tên sách</th>
                     <th>Số lượng</th>
                     <th>Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {borrowDetails.map((d) => (
-                    <tr key={d.maMuonCT}>
-                      <td>{d.maMuonCT?.substring(18, 24)}</td>
-                      <td>{d.maMuon?.substring(18, 24)}</td>
-                      <td>{d.tenSach}</td>
-                      <td>{d.soLuong}</td>
-                      <td>
-                        <div className="btn-group">
-                          <button
-                            className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
-                            onClick={() => setEditingDetail(d)}
-                          >
-                            <FaEdit /> Sửa
-                          </button>
-                          <button
-                            className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
-                            onClick={() => handleDelete(d.maMuonCT)}
-                          >
-                            <FaTrash /> Xóa
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  {borrowDetails.length === 0 && (
+                  {filteredDetails.length > 0 ? (
+                    filteredDetails.map((d) => (
+                      <tr key={d.maMuonCT}>
+                        <td>{d.maMuonCT?.substring(18, 24)}</td>
+                        <td>{d.maMuon?.substring(18, 24)}</td>
+                        <td>
+                          <strong>{d.tenNguoiDung}</strong>
+                        </td>
+                        <td>{d.tenSach}</td>
+                        <td>{d.soLuong}</td>
+                        <td>
+                          <div className="btn-group">
+                            <button
+                              className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1"
+                              onClick={() => setEditingDetail(d)}
+                            >
+                              <FaEdit /> Sửa
+                            </button>
+                            <button
+                              className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                              onClick={() => handleDelete(d.maMuonCT)}
+                            >
+                              <FaTrash /> Xóa
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
-                      <td colSpan="5" className="text-center text-muted">
-                        Không có dữ liệu
+                      <td colSpan="6" className="text-center text-muted">
+                        Không có dữ liệu phù hợp
                       </td>
                     </tr>
                   )}

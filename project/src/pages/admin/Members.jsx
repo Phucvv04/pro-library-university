@@ -56,10 +56,6 @@ const Members = () => {
   // Thêm người dùng
   const handleAddMember = async (data) => {
     try {
-      if (!data.tenNguoiDung?.trim()) {
-        toast.error("Tên người dùng không được để trống!");
-        return;
-      }
       await createMember(data);
       toast.success("Thêm người dùng thành công!");
       setShowForm(false);
@@ -73,10 +69,6 @@ const Members = () => {
   // Cập nhật người dùng
   const handleUpdateMember = async (data) => {
     try {
-      if (!data.tenNguoiDung?.trim()) {
-        toast.error("Tên người dùng không được để trống!");
-        return;
-      }
       await updateMember(editingMember.maNguoiDung, data);
       toast.success("Cập nhật người dùng thành công!");
       setEditingMember(null);

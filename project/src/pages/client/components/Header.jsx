@@ -30,7 +30,7 @@ const Header = () => {
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
-    // 👉 Điều hướng ngay trên /client kèm query param
+    //  Điều hướng ngay trên /client kèm query param
     navigate(`/client?search=${encodeURIComponent(searchQuery)}`);
   };
 

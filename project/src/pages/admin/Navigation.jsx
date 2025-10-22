@@ -16,13 +16,13 @@ import {
 const Navigation = () => {
   const location = useLocation();
 
-  // Lấy thông tin vai trò (ví dụ: từ localStorage hoặc Context)
+  // Lấy thông tin vai trò
   const user = JSON.parse(localStorage.getItem("user"));
-  const vaiTro = user?.vaiTro || ""; // ví dụ "Admin" hoặc "Thủ thư"
+  const vaiTro = user?.vaiTro || ""; // quản lý hoặc thủ thư
 
   const isActive = (path) => location.pathname === path;
 
-  // Danh sách menu mặc định
+  // Danh sách sidebar mặc định
   const navItems = [
     { path: "/admin", icon: <FaChartBar />, label: "Dashboard" },
     { path: "/admin/books", icon: <FaBook />, label: "Quản lý sách" },
@@ -47,7 +47,7 @@ const Navigation = () => {
     { path: "/admin/statistics", icon: <FaChartLine />, label: "Thống kê" },
   ];
 
-  // Nếu là Thủ thư thì loại bỏ menu Quản lý người dùng
+  // Nếu là Thủ thư thì loại bỏ Quản lý người dùng
   const filteredNavItems =
     vaiTro === "Thủ thư"
       ? navItems.filter((item) => item.path !== "/admin/members")

@@ -17,13 +17,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1️⃣ Kiểm tra trống
+    // Kiểm tra trống
     if (!username || !password) {
       alert("Vui lòng nhập thông tin");
       return;
     }
 
-    // 2️⃣ Kiểm tra ký tự đặc biệt
+    // Kiểm tra ký tự đặc biệt
     const regex = /^[a-zA-Z0-9]+$/;
     if (!regex.test(username)) {
       alert("Tài khoản không hợp lệ");
@@ -34,26 +34,26 @@ const Login = () => {
       const res = await getMembers();
       const members = res.data;
 
-      // 3️⃣ Kiểm tra tài khoản tồn tại
+      // Kiểm tra tài khoản tồn tại
       const userExist = members.find((m) => m.username === username);
       if (!userExist) {
         alert("Tài khoản không tồn tại");
         return;
       }
 
-      // 4️⃣ Kiểm tra mật khẩu
+      // Kiểm tra mật khẩu
       if (userExist.password !== password) {
         alert("Sai tài khoản hoặc mật khẩu");
         return;
       }
 
-      // 5️⃣ Kiểm tra vai trò
+      // Kiểm tra vai trò
       if (userExist.vaiTro !== vaiTro) {
         alert("Đăng nhập không thành công");
         return;
       }
 
-      // ✅ Thành công
+      // Thành công
       localStorage.setItem("user", JSON.stringify(userExist));
 
       if (vaiTro === "Thủ thư" || vaiTro === "Quản lý") {

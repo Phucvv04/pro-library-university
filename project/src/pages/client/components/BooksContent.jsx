@@ -14,7 +14,7 @@ const BooksContent = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 👉 lấy query param từ URL
+  // lấy query param từ URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const search = queryParams.get("search")?.toLowerCase() || "";
@@ -92,7 +92,7 @@ const BooksContent = () => {
       {/* Nội dung sách */}
       <Col md={9}>
         {search ? (
-          // 🔍 Kết quả tìm kiếm
+          //  Kết quả tìm kiếm
           <div className="books-section p-4 mb-5 rounded shadow-sm bg-white">
             <h3 className="mb-4">Kết quả tìm kiếm cho: "{search}"</h3>
             <Row className="g-4">
@@ -118,7 +118,7 @@ const BooksContent = () => {
             </Row>
           </div>
         ) : selectedCategory ? (
-          // 📂 Lọc theo thể loại
+          //  Lọc theo thể loại
           <div className="books-section p-4 mb-5 rounded shadow-sm bg-white">
             <h3 className="mb-4 section-title">
               <BookOpen color="#007BFF" /> Sách thuộc thể loại:{" "}
@@ -147,7 +147,7 @@ const BooksContent = () => {
             </Row>
           </div>
         ) : (
-          // ⭐ Hiển thị mặc định: nổi bật + đề xuất
+          //  Hiển thị mặc định: nổi bật + đề xuất
           <>
             <div className="books-section p-4 mb-5 rounded shadow-sm bg-light">
               <h3 className="mb-4 section-title">

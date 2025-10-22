@@ -11,7 +11,6 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
     trangThai: "Đang mượn",
   });
 
-  // 🔹 Chuyển danh sách người dùng thành định dạng react-select
   const userOptions = members.map((u) => ({
     value: u.maNguoiDung,
     label: `${u.tenNguoiDung} (${u.email})`,
@@ -45,8 +44,15 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
       return;
     }
 
-    //  Kiểm tra ngày trả dự kiến phải >= ngày mượn
+    // Kiểm tra ngày mượn không được lớn hơn ngày hiện tại
     const ngayMuon = new Date(formData.ngayMuon);
+    const today = new Date();
+    if (ngayMuon > today) {
+      toast.error("Ngày mượn không được lớn hơn ngày hiện tại!");
+      return;
+    }
+
+    // Kiểm tra ngày trả dự kiến phải >= ngày mượn
     const ngayTraDuKien = new Date(formData.ngayTraDuKien);
     if (ngayTraDuKien < ngayMuon) {
       toast.error("Ngày trả dự kiến không được nhỏ hơn ngày mượn!");

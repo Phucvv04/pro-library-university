@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user) {
-    // Nếu chưa đăng nhập → về trang login
+    // Nếu chưa đăng nhập -> quay về trang login
     return <Navigate to="/login" replace />;
   }
 

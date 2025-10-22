@@ -13,7 +13,6 @@ import { getCategories } from "../../services/categoryService";
 import { getPublishers } from "../../services/publisherService";
 import { getBorrowDetails } from "../../services/borrowingDetailService";
 
-// Import icon từ react-icons
 import { FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
 
 const Books = () => {
@@ -70,10 +69,6 @@ const Books = () => {
 
   const handleAddBook = async (data) => {
     try {
-      if (!data.tenSach?.trim()) {
-        toast.error("Tên sách không được để trống!");
-        return;
-      }
       await createBook(data);
       toast.success("Thêm sách thành công!");
       setShowForm(false);
@@ -86,10 +81,6 @@ const Books = () => {
 
   const handleUpdateBook = async (data) => {
     try {
-      if (!data.tenSach?.trim()) {
-        toast.error("Tên sách không được để trống!");
-        return;
-      }
       await updateBook(editingBook.maSach, data);
       toast.success("Cập nhật sách thành công!");
       setEditingBook(null);

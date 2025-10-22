@@ -45,10 +45,6 @@ const Categories = () => {
 
   const handleAddCategory = async (data) => {
     try {
-      if (!data.tenTheLoai?.trim()) {
-        toast.error("Tên thể loại không được để trống!");
-        return;
-      }
       await createCategory(data);
       toast.success("Thêm thể loại thành công!");
       setShowForm(false);
@@ -61,10 +57,6 @@ const Categories = () => {
 
   const handleUpdateCategory = async (data) => {
     try {
-      if (!data.tenTheLoai?.trim()) {
-        toast.error("Tên thể loại không được để trống!");
-        return;
-      }
       await updateCategory(editingCategory.maTheLoai, data);
       toast.success("Cập nhật thể loại thành công!");
       setEditingCategory(null);

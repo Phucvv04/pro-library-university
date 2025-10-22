@@ -45,10 +45,6 @@ const Authors = () => {
 
   const handleAddAuthor = async (data) => {
     try {
-      if (!data.tenTacGia.trim()) {
-        toast.error("Tên tác giả không được để trống!");
-        return;
-      }
       await createAuthor(data);
       toast.success("Thêm tác giả thành công!");
       setShowForm(false);
@@ -61,10 +57,6 @@ const Authors = () => {
 
   const handleUpdateAuthor = async (data) => {
     try {
-      if (!data.tenTacGia.trim()) {
-        toast.error("Tên tác giả không được để trống!");
-        return;
-      }
       await updateAuthor(editingAuthor.maTacGia, data);
       toast.success("Cập nhật tác giả thành công!");
       setEditingAuthor(null);

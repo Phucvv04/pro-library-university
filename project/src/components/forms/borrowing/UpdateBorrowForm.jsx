@@ -6,7 +6,29 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => {
+      let updated = { ...prev, [name]: value };
+
+      // Nếu người dùng thay đổi ngày trả thực tế → tự động cập nhật trạng thái
+      if (name === "ngayTraThucTe" && value) {
+        const ngayTraThucTe = new Date(value);
+        const ngayTraDuKien = new Date(prev.ngayTraDuKien);
+
+        if (ngayTraThucTe > ngayTraDuKien) {
+          updated.trangThai = "Quá hạn";
+        } else {
+          updated.trangThai = "Đã trả";
+        }
+      }
+
+      // Nếu xóa ngày trả thực tế → quay lại trạng thái “Đang mượn”
+      if (name === "ngayTraThucTe" && !value) {
+        updated.trangThai = "Đang mượn";
+      }
+
+      return updated;
+    });
   };
 
   const handleSubmit = (e) => {
@@ -16,16 +38,25 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
       toast.error("Ngày mượn không được để trống!");
       return;
     }
+
     if (!formData.ngayTraDuKien) {
       toast.error("Ngày trả dự kiến không được để trống!");
       return;
     }
 
-    // 🔹 Kiểm tra nếu có ngày trả thực tế thì không được nhỏ hơn ngày mượn
-    if (formData.ngayTraThucTe) {
-      const ngayMuon = new Date(formData.ngayMuon);
-      const ngayTraThucTe = new Date(formData.ngayTraThucTe);
+    const ngayMuon = new Date(formData.ngayMuon);
+    const ngayTraDuKien = new Date(formData.ngayTraDuKien);
 
+    if (ngayTraDuKien < ngayMuon) {
+      toast.error("Ngày trả dự kiến không được nhỏ hơn ngày mượn!");
+      return;
+    }
+    if (!formData.ngayTraThucTe) {
+      toast.error("Ngày trả thực tế không được để trống!");
+      return;
+    }
+    if (formData.ngayTraThucTe) {
+      const ngayTraThucTe = new Date(formData.ngayTraThucTe);
       if (ngayTraThucTe < ngayMuon) {
         toast.error("Ngày trả thực tế không được nhỏ hơn ngày mượn!");
         return;
@@ -105,16 +136,12 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose, members = [] }) => {
           {/* Trạng thái */}
           <div className="mb-3">
             <label className="form-label">Trạng thái</label>
-            <select
-              name="trangThai"
+            <input
+              type="text"
+              className="form-control"
               value={formData.trangThai}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option>Đang mượn</option>
-              <option>Đã trả</option>
-              <option>Quá hạn</option>
-            </select>
+              disabled
+            />
           </div>
 
           <div className="d-flex gap-2">

@@ -45,10 +45,6 @@ const Publishers = () => {
   // Thêm NXB
   const handleAddPublisher = async (data) => {
     try {
-      if (!data.tenNhaXB?.trim()) {
-        toast.error("Tên NXB không được để trống!");
-        return;
-      }
       await createPublisher(data);
       toast.success("Thêm nhà xuất bản thành công!");
       setShowForm(false);
@@ -62,10 +58,6 @@ const Publishers = () => {
   // Cập nhật NXB
   const handleUpdatePublisher = async (data) => {
     try {
-      if (!data.tenNhaXB?.trim()) {
-        toast.error("Tên NXB không được để trống!");
-        return;
-      }
       await updatePublisher(editingPublisher.maNhaXB, data);
       toast.success("Cập nhật nhà xuất bản thành công!");
       setEditingPublisher(null);

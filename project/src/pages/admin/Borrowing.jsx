@@ -83,30 +83,6 @@ const Borrowing = () => {
     }
   };
 
-  const handleDelete = async (maMuon) => {
-    const borrow = borrows.find((b) => b.maMuon === maMuon);
-
-    // 🔹 Kiểm tra trạng thái "Đang mượn"
-    if (borrow && borrow.trangThai === "Đang mượn") {
-      toast.error("Không thể xóa phiếu đang mượn! Vui lòng trả sách trước.");
-      return;
-    }
-
-    if (!window.confirm("Bạn có chắc muốn xóa phiếu mượn này?")) {
-      toast.info("Đã hủy xóa phiếu mượn.");
-      return;
-    }
-
-    try {
-      await deleteBorrow(maMuon);
-      setBorrows((prev) => prev.filter((b) => b.maMuon !== maMuon));
-      toast.success("Xóa phiếu mượn thành công!");
-    } catch (error) {
-      console.error(error);
-      toast.error("Lỗi khi xóa phiếu mượn!");
-    }
-  };
-
   const handleAdd = async (newBorrow) => {
     try {
       const res = await createBorrow(newBorrow);
@@ -137,7 +113,29 @@ const Borrowing = () => {
       toast.error("Lỗi khi cập nhật phiếu mượn!");
     }
   };
+  const handleDelete = async (maMuon) => {
+    const borrow = borrows.find((b) => b.maMuon === maMuon);
 
+    // 🔹 Kiểm tra trạng thái "Đang mượn"
+    if (borrow && borrow.trangThai === "Đang mượn") {
+      toast.error("Không thể xóa phiếu đang mượn! Vui lòng trả sách trước.");
+      return;
+    }
+
+    if (!window.confirm("Bạn có chắc muốn xóa phiếu mượn này?")) {
+      toast.info("Đã hủy xóa phiếu mượn.");
+      return;
+    }
+
+    try {
+      await deleteBorrow(maMuon);
+      setBorrows((prev) => prev.filter((b) => b.maMuon !== maMuon));
+      toast.success("Xóa phiếu mượn thành công!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Lỗi khi xóa phiếu mượn!");
+    }
+  };
   const filteredBorrows = borrows.filter(
     (b) =>
       (b.tenNguoiDung &&

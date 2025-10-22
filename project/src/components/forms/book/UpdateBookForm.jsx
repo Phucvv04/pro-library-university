@@ -26,7 +26,7 @@ export default function UpdateBookForm({
         tenTheLoai: book.tenTheLoai || "",
         tenNhaXB: book.tenNhaXB || "",
         moTa: book.moTa || "",
-        soLuong: book.soLuong || 1,
+        soLuong: book.soLuong,
       });
     }
   }, [book]);

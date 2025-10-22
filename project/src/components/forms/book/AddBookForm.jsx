@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-
+import Select from "react-select";
 const AddBookForm = ({
   onSave,
   onCancel,
@@ -16,10 +16,41 @@ const AddBookForm = ({
     moTa: "",
     soLuong: 1,
   });
-
+  const authorOptions = authors.map((u) => ({
+    value: u.tenTacGia,
+    label: `${u.tenTacGia} (${u.queQuan})`,
+  }));
+  const categoryOptions = categories.map((u) => ({
+    value: u.tenTheLoai,
+    label: u.tenTheLoai,
+  }));
+  const publisherOptions = publishers.map((u) => ({
+    value: u.tenNhaXB,
+    label: u.tenNhaXB,
+  }));
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleAuthorChange = (selected) => {
+    setFormData((prev) => ({
+      ...prev,
+      tenTacGia: selected ? selected.value : "",
+    }));
+  };
+
+  const handlePublisherChange = (selected) => {
+    setFormData((prev) => ({
+      ...prev,
+      tenNhaXB: selected ? selected.value : "",
+    }));
+  };
+
+  const handleCategoryChange = (selected) => {
+    setFormData((prev) => ({
+      ...prev,
+      tenTheLoai: selected ? selected.value : "",
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -80,53 +111,52 @@ const AddBookForm = ({
 
           <div className="mb-3">
             <label className="form-label">Tác giả</label>
-            <select
-              name="tenTacGia"
-              value={formData.tenTacGia}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="">-- Chọn tác giả --</option>
-              {authors.map((a) => (
-                <option key={a.tenTacGia} value={a.tenTacGia}>
-                  {a.tenTacGia}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={authorOptions}
+              onChange={handleAuthorChange}
+              value={
+                authorOptions.find((opt) => opt.value === formData.tenTacGia) ||
+                null
+              }
+              placeholder="Nhập hoặc chọn tác giả"
+              isSearchable
+              isClearable
+              noOptionsMessage={() => "Không tìm thấy tác giả"}
+            />
           </div>
 
           <div className="mb-3">
             <label className="form-label">Thể loại</label>
-            <select
-              name="tenTheLoai"
-              value={formData.tenTheLoai}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="">-- Chọn thể loại --</option>
-              {categories.map((c) => (
-                <option key={c.tenTheLoai} value={c.tenTheLoai}>
-                  {c.tenTheLoai}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={categoryOptions}
+              onChange={handleCategoryChange}
+              value={
+                categoryOptions.find(
+                  (opt) => opt.value === formData.tenTheLoai
+                ) || null
+              }
+              placeholder="Nhập hoặc chọn thể loại"
+              isSearchable
+              isClearable
+              noOptionsMessage={() => "Không tìm thấy thể loại"}
+            />
           </div>
 
           <div className="mb-3">
             <label className="form-label">Nhà xuất bản</label>
-            <select
-              name="tenNhaXB"
-              value={formData.tenNhaXB}
-              onChange={handleChange}
-              className="form-select"
-            >
-              <option value="">-- Chọn NXB --</option>
-              {publishers.map((p) => (
-                <option key={p.tenNhaXB} value={p.tenNhaXB}>
-                  {p.tenNhaXB}
-                </option>
-              ))}
-            </select>
+            <Select
+              options={publisherOptions}
+              onChange={handlePublisherChange}
+              value={
+                publisherOptions.find(
+                  (opt) => opt.value === formData.tenNhaXB
+                ) || null
+              }
+              placeholder="Nhập hoặc chọn nhà xuất bản"
+              isSearchable
+              isClearable
+              noOptionsMessage={() => "Không tìm thấy nhà xuất bản"}
+            />
           </div>
           <div className="mb-3">
             <label className="form-label">Mô tả</label>

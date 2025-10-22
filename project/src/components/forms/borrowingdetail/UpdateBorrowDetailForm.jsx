@@ -29,13 +29,13 @@ export default function UpdateBorrowDetailForm({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "soLuong" ? Number(value) : value, // đảm bảo soLuong là number
+      [name]: name === "soLuong" ? Number(value) : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData); // gửi lên cha
+    onSave(formData);
   };
 
   return (

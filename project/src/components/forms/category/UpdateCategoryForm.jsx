@@ -29,7 +29,7 @@ const UpdateCategoryForm = ({ category, categories = [], onSave, onClose }) => {
       toast.error("Tên thể loại không được để trống!");
       return;
     }
-    // Kiểm tra trùng tên (ngoại trừ chính NXB đang sửa)
+    // Kiểm tra trùng tên (ngoại trừ chính thể đang sửa)
     const isDuplicate = categories.some(
       (a) =>
         a.maTheLoai !== formData.maTheLoai &&
