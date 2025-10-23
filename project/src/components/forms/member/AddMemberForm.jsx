@@ -81,15 +81,6 @@ const AddMemberForm = ({ onSave, onCancel, existingUsers = [] }) => {
         return;
       }
 
-      const isPasswordExist = users.some(
-        (u) =>
-          u.password?.trim().toLowerCase() === password.trim().toLowerCase()
-      );
-      if (isPasswordExist) {
-        toast.error("Mật khẩu đã tồn tại!");
-        return;
-      }
-
       const isEmailExist = users.some(
         (u) => u.email?.trim().toLowerCase() === email.trim().toLowerCase()
       );

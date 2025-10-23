@@ -45,7 +45,7 @@ function App() {
       <Router>
         <Routes>
           {/* Điều hướng "/" sang /client hoặc /admin */}
-          <Route path="/" element={<Navigate to="/client" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
 
           {/* Client Routes */}
           <Route path="/client" element={<ClientLayout />}>
