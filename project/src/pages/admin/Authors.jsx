@@ -169,6 +169,7 @@ const Authors = () => {
                   <table className="table">
                     <thead>
                       <tr>
+                        <th>STT</th>
                         <th>Mã tác giả</th>
                         <th>Tên tác giả</th>
                         <th>Quê quán</th>
@@ -179,6 +180,7 @@ const Authors = () => {
                     <tbody>
                       {filteredAuthors.map((author) => (
                         <tr key={author.maTacGia}>
+                          <td>{authors.indexOf(author) + 1}</td>
                           <td>{author.maTacGia?.substring(18, 24)}</td>
                           <td>{author.tenTacGia}</td>
                           <td>{author.queQuan}</td>

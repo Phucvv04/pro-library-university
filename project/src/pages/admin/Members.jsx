@@ -209,8 +209,9 @@ const Members = () => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>Mã</th>
-                        <th>Tên</th>
+                        <th>STT</th>
+                        <th>Mã người dùng</th>
+                        <th>Tên người dùng</th>
                         <th>Email</th>
                         <th>Username</th>
                         <th>Password</th>
@@ -224,6 +225,7 @@ const Members = () => {
                     <tbody>
                       {filteredMembers.map((member) => (
                         <tr key={member.maNguoiDung}>
+                          <td>{filteredMembers.indexOf(member) + 1}</td>
                           <td>{member.maNguoiDung?.substring(18, 24)}</td>
                           <td>{member.tenNguoiDung}</td>
                           <td>{member.email}</td>

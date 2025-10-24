@@ -116,7 +116,6 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose }) => {
               value={formData.ngayMuon?.substring(0, 10) || ""}
               onChange={handleChange}
               className="form-control"
-              required
             />
           </div>
 
@@ -129,7 +128,6 @@ const UpdateBorrowForm = ({ borrow, onSave, onClose }) => {
               value={formData.ngayTraDuKien?.substring(0, 10) || ""}
               onChange={handleChange}
               className="form-control"
-              required
             />
           </div>
 

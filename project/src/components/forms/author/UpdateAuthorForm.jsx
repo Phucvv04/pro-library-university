@@ -29,13 +29,6 @@ const UpdateAuthorForm = ({ author, authors = [], onSave, onClose }) => {
       return;
     }
 
-    // Regex kiểm tra ký tự đặc biệt
-    const Regex = /^[a-zA-ZÀ-ỹ\s]+$/;
-    if (!Regex.test(formData.tenTacGia.trim())) {
-      toast.error("Tên tác giả không được chứa ký tự đặc biệt!");
-      return;
-    }
-
     // Kiểm tra trùng tên (ngoại trừ chính tác giả đang sửa)
     const isDuplicate = authors.some(
       (a) =>

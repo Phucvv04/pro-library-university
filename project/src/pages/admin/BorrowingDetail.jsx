@@ -158,7 +158,8 @@ const BorrowingDetail = () => {
               <table className="table align-middle">
                 <thead>
                   <tr>
-                    <th>Mã chi tiết</th>
+                    <th>STT</th>
+                    <th>Mã mượn chi tiết</th>
                     <th>Mã mượn</th>
                     <th>Tên độc giả</th>
                     <th>Tên sách</th>
@@ -170,6 +171,7 @@ const BorrowingDetail = () => {
                   {filteredDetails.length > 0 ? (
                     filteredDetails.map((d) => (
                       <tr key={d.maMuonCT}>
+                        <td>{filteredDetails.indexOf(d) + 1}</td>
                         <td>{d.maMuonCT?.substring(18, 24)}</td>
                         <td>{d.maMuon?.substring(18, 24)}</td>
                         <td>

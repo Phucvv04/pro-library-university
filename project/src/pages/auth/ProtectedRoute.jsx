@@ -9,7 +9,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user) {
-    // Nếu chưa đăng nhập -> quay về trang login
     return <Navigate to="/login" replace />;
   }
 
@@ -17,7 +16,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const vaiTro = user.vaiTro || "";
 
   if (!allowedRoles.includes(vaiTro)) {
-    // Nếu không đủ quyền → quay lại Dashboard
+    // Nếu không đủ quyền -> quay lại Dashboard
     return <Navigate to="/admin" replace />;
   }
 

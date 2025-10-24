@@ -176,6 +176,7 @@ const Publishers = () => {
                   <table className="table">
                     <thead>
                       <tr>
+                        <th>STT</th>
                         <th>Mã NXB</th>
                         <th>Tên NXB</th>
                         <th>Mô tả</th>
@@ -185,6 +186,7 @@ const Publishers = () => {
                     <tbody>
                       {filteredPublishers.map((publisher) => (
                         <tr key={publisher.maNhaXB}>
+                          <td>{filteredPublishers.indexOf(publisher) + 1}</td>
                           <td>{publisher.maNhaXB?.substring(18, 24)}</td>
                           <td>{publisher.tenNhaXB}</td>
                           <td>{publisher.moTa}</td>

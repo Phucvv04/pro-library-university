@@ -116,6 +116,7 @@ const Statistics = () => {
           <table className="table table-hover align-middle">
             <thead className="table-primary">
               <tr>
+                <th>STT</th>
                 <th>Mã mượn</th>
                 <th>Tên sách</th>
                 <th>Tiền phạt</th>
@@ -133,6 +134,7 @@ const Statistics = () => {
                       borrow?.trangThai === "Quá hạn" ? "table-danger" : ""
                     }
                   >
+                    <td>{borrowDetails.indexOf(d) + 1}</td>
                     <td>{d.maMuon?.substring(18, 24)}</td>
                     <td>{d.tenSach}</td>
                     <td>{fine.toLocaleString()} đ</td>

@@ -119,7 +119,6 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
               value={formData.ngayMuon}
               onChange={handleChange}
               className="form-control"
-              required
             />
           </div>
 
@@ -132,7 +131,6 @@ const AddBorrowForm = ({ onSave, onClose, members = [] }) => {
               value={formData.ngayTraDuKien}
               onChange={handleChange}
               className="form-control"
-              required
             />
           </div>
 

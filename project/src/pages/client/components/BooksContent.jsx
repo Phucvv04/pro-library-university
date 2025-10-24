@@ -33,10 +33,10 @@ const BooksContent = () => {
         setCategories(cats);
         setBooks(booksData);
 
-        setFeaturedBooks(booksData.slice(0, 4));
+        setFeaturedBooks(booksData.slice(0, 6));
 
         const shuffled = [...booksData].sort(() => 0.5 - Math.random());
-        setRecommendedBooks(shuffled.slice(0, 3));
+        setRecommendedBooks(shuffled.slice(0, 6));
       } catch (error) {
         console.error("Lỗi load dữ liệu:", error);
       } finally {
@@ -56,7 +56,7 @@ const BooksContent = () => {
     );
   }
 
-  // 👉 Ưu tiên lọc theo search > category
+  //  Ưu tiên lọc theo search > category
   let filteredBooks = [];
   if (search) {
     filteredBooks = books.filter((b) =>

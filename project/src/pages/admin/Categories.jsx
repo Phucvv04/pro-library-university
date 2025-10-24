@@ -173,6 +173,7 @@ const Categories = () => {
                   <table className="table align-middle">
                     <thead>
                       <tr>
+                        <th>STT</th>
                         <th>Mã thể loại</th>
                         <th>Tên thể loại</th>
                         <th>Mô tả</th>
@@ -182,6 +183,7 @@ const Categories = () => {
                     <tbody>
                       {filteredCategories.map((category) => (
                         <tr key={category.maTheLoai}>
+                          <td>{categories.indexOf(category) + 1}</td>
                           <td>{category.maTheLoai?.substring(18, 24)}</td>
                           <td>{category.tenTheLoai}</td>
                           <td>{category.moTa}</td>

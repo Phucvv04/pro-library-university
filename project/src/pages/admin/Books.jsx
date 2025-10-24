@@ -190,6 +190,7 @@ const Books = () => {
                   <table className="table">
                     <thead>
                       <tr>
+                        <th>STT</th>
                         <th>Mã sách</th>
                         <th>Tên sách</th>
                         <th>Tác giả</th>
@@ -203,6 +204,7 @@ const Books = () => {
                     <tbody>
                       {filteredBooks.map((book) => (
                         <tr key={book.maSach}>
+                          <td>{books.indexOf(book) + 1}</td>
                           <td>{book.maSach?.substring(18, 24)}</td>
                           <td>{book.tenSach}</td>
                           <td>{getAuthorName(book.tenTacGia)}</td>

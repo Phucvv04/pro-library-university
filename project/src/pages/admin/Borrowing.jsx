@@ -221,6 +221,7 @@ const Borrowing = () => {
               <table className="table align-middle">
                 <thead>
                   <tr>
+                    <th>STT</th>
                     <th>Mã mượn</th>
                     <th>Người dùng</th>
                     <th>Ngày mượn</th>
@@ -233,6 +234,7 @@ const Borrowing = () => {
                 <tbody>
                   {filteredBorrows.map((b) => (
                     <tr key={b.maMuon}>
+                      <td>{filteredBorrows.indexOf(b) + 1}</td>
                       <td>
                         <span className="badge text-dark">
                           {b.maMuon?.substring(18, 24)}

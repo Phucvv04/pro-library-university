@@ -21,12 +21,6 @@ const AddAuthorForm = ({ onSave, onCancel, authors = [] }) => {
       return;
     }
 
-    const Regex = /^[a-zA-ZÀ-ỹ\s]+$/;
-    if (!Regex.test(formData.tenTacGia.trim())) {
-      toast.error("Tên tác giả không được chứa ký tự đặc biệt!");
-      return;
-    }
-
     if (!formData.queQuan.trim()) {
       toast.error("Vui lòng nhập quê quán!");
       return;
